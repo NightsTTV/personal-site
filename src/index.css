@@ -2,23 +2,247 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ------------------------------------------------------------------ *
+ * Design tokens — "Phosphor Lab"
+ * Warm ink base · bone text · restrained lime/chartreuse signal accent.
+ * Semantic colors are plain CSS vars so they flip automatically in .dark.
+ * ------------------------------------------------------------------ */
+:root {
+  color-scheme: light;
+
+  --paper: #f4f1e7;        /* page background */
+  --surface: #fbf9f2;      /* raised cards */
+  --surface-2: #ece6d6;    /* sunken panels / table headers */
+  --ink: #181a10;          /* primary text */
+  --ink-soft: #4c4f3c;     /* body text */
+  --ink-faint: #5e6149;    /* meta / captions — AA on all surfaces */
+  --line: #ded7c4;         /* hairline borders */
+  --line-strong: #c9bfa4;  /* stronger dividers */
+
+  --accent: #3a5a0f;       /* deep lime — AA text/link on paper & panels */
+  --accent-strong: #2f4a0c;/* hover */
+  --accent-bright: #aadb2f;/* lime fills */
+  --accent-contrast: #1a2706; /* text on bright fills */
+  --signal: 132 204 22;    /* lime-500 rgb — for glows */
+}
+
+.dark {
+  color-scheme: dark;
+
+  --paper: #090c0a;
+  --surface: #10140e;
+  --surface-2: #181d13;
+  --ink: #e9e7da;
+  --ink-soft: #a6ac95;
+  --ink-faint: #8a907a;    /* AA on ink & raised panels */
+  --line: #232a1b;
+  --line-strong: #323a26;
+
+  --accent: #c2f163;       /* bright phosphor lime on ink */
+  --accent-strong: #d6f98e;
+  --accent-bright: #c2f163;
+  --accent-contrast: #0a0d0b;
+  --signal: 174 222 84;
+}
+
+@theme inline {
+  --font-display: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
+  --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-bright: var(--accent-bright);
+  --color-accent-contrast: var(--accent-contrast);
+}
+
+/* ------------------------------------------------------------------ *
+ * Base
+ * ------------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-feature-settings: "ss01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-weight: 600;
+  }
+
+  ::selection {
+    background: rgb(var(--signal) / 0.28);
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  code, pre { font-family: var(--font-mono); }
+
+  /* inline code inside prose */
+  :not(pre) > code {
+    font-size: 0.85em;
+    color: var(--accent);
+    background: rgb(var(--signal) / 0.09);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.08em 0.4em;
+    overflow-wrap: anywhere;
+  }
+
+  strong { color: var(--ink); font-weight: 600; }
+}
+
+/* ------------------------------------------------------------------ *
+ * Utilities — atmosphere, texture & motion
+ * ------------------------------------------------------------------ */
 @layer utilities {
-  .text-outline-black {
-    color: #0f172a;
-    -webkit-text-stroke: 2px #fff;
-    paint-order: stroke fill;
+  /* faint computational dot-lattice */
+  .bg-lattice {
+    background-image: radial-gradient(
+      rgb(var(--signal) / 0.16) 1px,
+      transparent 1.3px
+    );
+    background-size: 26px 26px;
   }
 
-  .dark .text-outline-black {
-    color: #fff;
-    -webkit-text-stroke: 2px #000;
+  /* film grain via inline SVG noise */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    mix-blend-mode: overlay;
   }
 
-  .casper-photo {
-    transition: transform 0.3s ease;
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+
+  /* mono kicker / eyebrow label */
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
   }
 
-  .casper-photo-wrap:hover .casper-photo {
-    transform: scale(1.03);
+  /* animated underline for inline links */
+  .ul-grow {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 1.5px;
+    transition: background-size 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
+  .ul-grow:hover { background-size: 100% 1.5px; }
+
+  /* image zoom-on-hover wrapper */
+  .img-zoom img { transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .img-zoom:hover img { transform: scale(1.04); }
+}
+
+/* ------------------------------------------------------------------ *
+ * Motion — staggered load + scroll reveals (reduced-motion aware)
+ * ------------------------------------------------------------------ */
+@keyframes phosphor-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.rise {
+  opacity: 0;
+  animation: phosphor-rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.io-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: opacity, transform;
+}
+.io-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* kaspiBOT chat — panel entrance + typing indicator */
+@keyframes chip-panel-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+
+.chip-panel {
+  transform-origin: bottom left;
+  animation: chip-panel-in 0.28s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes chip-blink {
+  0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
+  40%           { opacity: 1; transform: translateY(-2px); }
+}
+
+.chip-dot {
+  animation: chip-blink 1.2s ease-in-out infinite;
+}
+
+/* kaspiBOT mascot — smooth pop-out tied to mouse closeness */
+.kaspibot-sprite {
+  will-change: transform, opacity;
+  transition:
+    transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1),
+    opacity 0.18s linear;
+}
+
+/* pill launcher — entrance + hover micro-animation */
+@keyframes chip-pill-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.95); }
+  to   { opacity: 1; transform: none; }
+}
+
+.chip-pill {
+  animation: chip-pill-in 0.4s 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.chip-pill:hover {
+  transform: scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .rise { animation: none; opacity: 1; }
+  .io-reveal { opacity: 1; transform: none; transition: none; }
+  .img-zoom img { transition: none; }
+  .chip-panel { animation: none; }
+  .chip-dot { animation: none; opacity: 0.6; }
+  .kaspibot-sprite { transition: none; }
+  .chip-pill { animation: none; }
+  .chip-pill:hover { transform: none; }
 }

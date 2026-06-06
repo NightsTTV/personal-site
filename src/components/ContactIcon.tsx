@@ -9,7 +9,7 @@ export function ContactIcon({ type }: { type: 'email' | 'phone' | 'linkedin' | '
 
   if (type === 'github') {
     return (
-      <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400">
+      <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-surface-2 text-accent">
         <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path d={paths.github} />
         </svg>
@@ -18,7 +18,7 @@ export function ContactIcon({ type }: { type: 'email' | 'phone' | 'linkedin' | '
   }
 
   return (
-    <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400">
+    <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-line bg-surface-2 text-accent">
       <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
         <path strokeLinecap="round" strokeLinejoin="round" d={paths[type]} />
       </svg>

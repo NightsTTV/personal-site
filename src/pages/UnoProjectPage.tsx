@@ -67,9 +67,9 @@ export function UnoProjectPage() {
       <ProjectSection title="Architecture & Technologies">
         <p>
           The system uses a centralized server model. The main thread accepts connections;
-          each client gets a <code className="text-sky-600 dark:text-sky-400">ClientHandler</code>{' '}
+          each client gets a <code>ClientHandler</code>{' '}
           from a cached thread pool. Game rooms live in a{' '}
-          <code className="text-sky-600 dark:text-sky-400">ConcurrentHashMap</code> so multiple
+          <code>ConcurrentHashMap</code> so multiple
           matches run in parallel without blocking.
         </p>
         <TechTable
@@ -83,10 +83,10 @@ export function UnoProjectPage() {
           ]}
         />
         <p className="mt-4">
-          <strong className="text-slate-900 dark:text-white">Sockets</strong> provide reliable
-          bidirectional communication. <strong className="text-slate-900 dark:text-white">Multithreading</strong>{' '}
+          <strong className="text-ink">Sockets</strong> provide reliable
+          bidirectional communication. <strong className="text-ink">Multithreading</strong>{' '}
           isolates each client while the server coordinates shared game state.{' '}
-          <strong className="text-slate-900 dark:text-white">Game state management</strong> keeps
+          <strong className="text-ink">Game state management</strong> keeps
           deck, discard pile, turn order, direction, and current color consistent via server-side
           broadcasts after every valid action.
         </p>
@@ -110,7 +110,7 @@ export function UnoProjectPage() {
       </ProjectSection>
 
       <ProjectSection title="How to Run">
-        <pre className="overflow-x-auto rounded-xl border border-slate-200 bg-slate-900 p-4 text-sm text-slate-100 dark:border-white/10">
+        <pre className="overflow-x-auto rounded-xl border border-line bg-[#0c0f0a] p-4 text-sm leading-relaxed text-[#cfe6a4]">
 {`# Terminal 1 — Server
 javac *.java
 java UNOServer
@@ -131,7 +131,7 @@ java UNOClient
             { label: 'Download full report (PDF)', href: '/documents/uno-report.pdf', external: true },
           ]}
         />
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-sm text-ink-faint">
           Source: Java/UNO (UNOServer, GameRoom, Player, Card, UNOClient). 
         </p>
       </ProjectSection>

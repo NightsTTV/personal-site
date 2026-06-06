@@ -1,56 +1,99 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ThemeToggle } from './ThemeToggle'
+import { ChipWidget } from './chip/ChipWidget'
 import { useTheme } from '../hooks/useTheme'
 
 const navLinks = [
   { label: 'Home', to: '/' },
-  { label: 'About', to: '/#about' },
   { label: 'Projects', to: '/#projects' },
+  { label: 'About', to: '/#about' },
   { label: 'Contact', to: '/#contact' },
 ]
+
+function Monogram({ className = '' }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 48 48"
+      fill="none"
+      aria-hidden="true"
+      className={`text-accent ${className}`}
+    >
+      <g
+        stroke="currentColor"
+        strokeWidth={5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M17 13 V35" />
+        <path d="M17 24 L31 13" />
+        <path d="M17 24 L31 35" />
+      </g>
+      <circle cx="31" cy="13" r="3.1" fill="currentColor" />
+      <circle cx="31" cy="35" r="2.2" fill="currentColor" />
+    </svg>
+  )
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const { theme, toggleTheme } = useTheme()
+
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur-md dark:border-white/10 dark:bg-slate-950/80">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+    <div className="relative min-h-screen text-ink">
+      {/* Atmosphere: phosphor glow · dot lattice · grain */}
+      <div
+        aria-hidden="true"
+        className="grain pointer-events-none fixed inset-0 -z-10 overflow-hidden"
+      >
+        <div
+          className="bg-lattice absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_70%)]"
+        />
+        <div className="absolute -top-48 left-1/2 h-[620px] w-[min(960px,120vw)] -translate-x-1/2 rounded-full bg-[rgb(var(--signal)/0.10)] blur-[130px]" />
+        <div className="absolute right-[-10%] top-1/3 h-[420px] w-[420px] rounded-full bg-[rgb(var(--signal)/0.05)] blur-[120px]" />
+      </div>
+
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-line/80 bg-paper/70 backdrop-blur-xl">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6 lg:px-8">
           <Link
             to="/"
-            className="text-lg font-semibold tracking-tight text-slate-900 transition hover:text-sky-600 dark:text-white dark:hover:text-sky-400"
+            className="group flex items-center gap-2.5"
+            aria-label="Kaspian Thomas — home"
           >
-            Kaspian Thomas
+            <Monogram className="h-6 w-6 shrink-0 transition-transform duration-300 group-hover:rotate-[-6deg]" />
+            <span className="font-display text-lg font-semibold tracking-tight text-ink">
+              Kaspian Thomas
+            </span>
           </Link>
 
-          <div className="hidden items-center gap-6 md:flex">
-            <ul className="flex items-center gap-8">
+          <div className="hidden items-center gap-7 md:flex">
+            <ul className="flex items-center gap-7">
               {navLinks.map((link) => (
                 <li key={link.label}>
                   <Link
                     to={link.to}
-                    className="text-sm font-medium text-slate-600 transition hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
+                    className="kicker ul-grow text-ink-faint transition-colors hover:text-ink"
                   >
                     {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
+            <span className="h-5 w-px bg-line-strong" aria-hidden="true" />
             <ThemeToggle theme={theme} onToggle={toggleTheme} />
             <Link
               to="/#contact"
-              className="rounded-full bg-sky-500 px-5 py-2 text-sm font-medium text-white transition hover:bg-sky-400"
+              className="rounded-md bg-accent-bright px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-accent-contrast transition hover:brightness-105 hover:shadow-[0_0_24px_rgb(var(--signal)/0.45)]"
             >
               Get in touch
             </Link>
           </div>
 
-          <div className="flex items-center gap-2 md:hidden">
+          <div className="flex items-center gap-1 md:hidden">
             <ThemeToggle theme={theme} onToggle={toggleTheme} />
             <button
               type="button"
-              className="inline-flex items-center justify-center rounded-lg p-2 text-slate-600 transition hover:bg-slate-200 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
+              className="inline-flex items-center justify-center rounded-lg p-2 text-ink-soft transition hover:bg-surface-2 hover:text-ink"
               aria-expanded={menuOpen}
               aria-label="Toggle navigation menu"
               onClick={() => setMenuOpen((open) => !open)}
@@ -61,7 +104,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </svg>
               ) : (
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 7h16M4 12h16M4 17h16" />
                 </svg>
               )}
             </button>
@@ -69,13 +112,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </nav>
 
         {menuOpen && (
-          <div className="border-t border-slate-200 bg-white px-4 pb-4 dark:border-white/10 dark:bg-slate-950 md:hidden">
+          <div className="border-t border-line bg-paper/95 px-4 pb-4 backdrop-blur-xl md:hidden">
             <ul className="flex flex-col gap-1 pt-2">
               {navLinks.map((link) => (
                 <li key={link.label}>
                   <Link
                     to={link.to}
-                    className="block rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white"
+                    className="block rounded-lg px-3 py-2.5 font-mono text-xs uppercase tracking-wider text-ink-soft transition hover:bg-surface-2 hover:text-ink"
                     onClick={() => setMenuOpen(false)}
                   >
                     {link.label}
@@ -85,7 +128,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </ul>
             <Link
               to="/#contact"
-              className="mt-3 block rounded-full bg-sky-500 px-5 py-2.5 text-center text-sm font-medium text-white transition hover:bg-sky-400"
+              className="mt-3 block rounded-md bg-accent-bright px-5 py-2.5 text-center font-mono text-xs font-semibold uppercase tracking-wider text-accent-contrast transition hover:brightness-105"
               onClick={() => setMenuOpen(false)}
             >
               Get in touch
@@ -94,17 +137,23 @@ export function Layout({ children }: { children: React.ReactNode }) {
         )}
       </header>
 
-      <main className="relative overflow-hidden pt-[4.25rem]">
-        <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-          <div className="absolute -top-40 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-sky-400/15 blur-3xl dark:bg-sky-500/20" />
-          <div className="absolute top-1/3 right-0 h-[400px] w-[400px] rounded-full bg-violet-400/10 blur-3xl dark:bg-violet-500/10" />
-        </div>
-        {children}
-      </main>
+      <main className="relative pt-[3.75rem]">{children}</main>
 
-      <footer className="border-t border-slate-200 py-8 text-center text-sm text-slate-500 dark:border-white/10">
-        <p>&copy; {new Date().getFullYear()} Kaspian Thomas. All rights reserved.</p>
+      <footer className="border-t border-line">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-10 sm:flex-row sm:px-6 lg:px-8">
+          <div className="flex items-center gap-2.5">
+            <Monogram className="h-5 w-5" />
+            <p className="font-mono text-xs text-ink-faint">
+              © {new Date().getFullYear()} Kaspian Thomas
+            </p>
+          </div>
+          <p className="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-ink-faint">
+            Designed &amp; built in New Orleans
+          </p>
+        </div>
       </footer>
+
+      <ChipWidget />
     </div>
   )
 }

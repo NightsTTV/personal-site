@@ -9,6 +9,15 @@ export type ProjectSummary = {
 
 export const projectSummaries: ProjectSummary[] = [
   {
+    slug: 'f1',
+    title: 'F1 AI Telemetry Commentary',
+    description:
+      'Real-time F1 telemetry turned into history-grounded AI commentary — a trigger engine and SQLite-backed RAG pipeline feed IBM Granite, streamed to a live React dashboard.',
+    status: 'Live',
+    tags: ['Python', 'FastAPI', 'RAG', 'React'],
+    path: '/projects/f1',
+  },
+  {
     slug: 'uno',
     title: 'UNO Card Game',
     description:
@@ -40,8 +49,8 @@ export const projectSummaries: ProjectSummary[] = [
     title: 'CHIP',
     description:
       'An Eliza influenced conversational chatbot exploring pattern matching dialogue and personality.',
-    status: 'Coming soon',
+    status: 'Live',
     tags: ['NLP', 'Chatbot'],
-    path: '#projects',
+    path: '/projects/chip',
   },
 ]

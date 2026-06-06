@@ -1,0 +1,21 @@
+# Netlify configuration for the personal site.
+# This file lives in my-personal-site/ (the site's project root). For a Git-based
+# deploy of the monorepo, set the site's "Base directory" to my-personal-site so
+# Netlify reads this file and runs the build here.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Vite 8 requires Node >= 20.19 / 22.12; pin a known-good LTS for reproducible builds.
+  NODE_VERSION = "22"
+
+# Single-page-app fallback: serve index.html (HTTP 200) for any unknown path so
+# React Router can handle client-side routes such as /projects/f1, /projects/uno,
+# etc. on direct load and refresh. (Also shipped as public/_redirects so manual
+# `netlify deploy --dir=dist` uploads include the rule.)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

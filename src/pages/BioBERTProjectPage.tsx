@@ -58,7 +58,7 @@ export function BioBERTProjectPage() {
 
       <ProjectSection title="Dataset">
         <p>
-          The <strong className="text-slate-900 dark:text-white">Player Injuries and Team Performance</strong>{' '}
+          The <strong className="text-ink">Player Injuries and Team Performance</strong>{' '}
           dataset (Kaggle, Amrit Biswas) combines Transfermarkt, soccer critic ratings, and
           SkySports sources across the EPL, La Liga, Bundesliga, and Serie A.
         </p>
@@ -149,7 +149,7 @@ export function BioBERTProjectPage() {
             },
           ]}
         />
-        <p className="text-sm text-slate-500 dark:text-slate-400">
+        <p className="text-sm text-ink-faint">
           Related work: Lee et al. (2019) BioBERT; Zhu et al. (2025) LLMs for sports injury.
           Notebooks: BioBERTv1–v4 in Python/NLP/BioBERT.
         </p>

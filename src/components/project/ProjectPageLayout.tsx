@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import type { ReactNode } from 'react'
+import { Reveal } from '../Reveal'
 
 type ProjectPageLayoutProps = {
   title: string
@@ -17,45 +18,47 @@ export function ProjectPageLayout({
   children,
 }: ProjectPageLayoutProps) {
   return (
-    <article className="scroll-mt-20 pb-14 pt-4 sm:pb-20">
+    <article className="scroll-mt-24 pb-16 pt-6 sm:pb-24">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <Link
           to="/#projects"
-          className="inline-flex items-center gap-2 text-sm font-medium text-sky-600 transition hover:text-sky-500 dark:text-sky-400 dark:hover:text-sky-300"
+          className="kicker inline-flex items-center gap-2 text-ink-faint transition-colors hover:text-accent"
         >
           <span aria-hidden="true">←</span> Back to projects
         </Link>
 
         <header className="mt-8">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5">
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full border border-sky-500/30 bg-sky-500/10 px-3 py-0.5 text-xs font-medium text-sky-700 dark:text-sky-400"
+                className="rounded border border-line bg-surface-2/60 px-2 py-0.5 font-mono text-[0.68rem] text-ink-faint"
               >
                 {tag}
               </span>
             ))}
           </div>
-          <h1 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl dark:text-white">
+          <h1 className="mt-5 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl lg:text-5xl">
             {title}
           </h1>
-          <p className="mt-4 text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+          <p className="mt-4 max-w-3xl text-pretty text-lg leading-relaxed text-ink-soft">
             {subtitle}
           </p>
         </header>
 
         {heroImage && (
-          <div className="mt-10 overflow-hidden rounded-2xl border border-slate-200 shadow-lg dark:border-white/10">
+          <div className="mt-10 overflow-hidden rounded-2xl border border-line-strong bg-surface p-2 shadow-[0_30px_60px_-32px_rgb(0_0_0/0.55)]">
             <img
               src={heroImage.src}
               alt={heroImage.alt}
-              className="w-full object-cover"
+              loading="lazy"
+              decoding="async"
+              className="w-full rounded-xl object-cover"
             />
           </div>
         )}
 
-        <div className="mt-12 space-y-14">{children}</div>
+        <div className="mt-14 space-y-14">{children}</div>
       </div>
     </article>
   )
@@ -69,14 +72,13 @@ export function ProjectSection({
   children: ReactNode
 }) {
   return (
-    <section>
-      <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+    <Reveal as="section">
+      <h2 className="flex items-center gap-3 font-display text-2xl font-semibold tracking-tight text-ink">
+        <span aria-hidden="true" className="h-6 w-1 shrink-0 rounded-full bg-accent-bright" />
         {title}
       </h2>
-      <div className="mt-4 space-y-4 text-slate-600 leading-relaxed dark:text-slate-300">
-        {children}
-      </div>
-    </section>
+      <div className="mt-4 space-y-4 leading-relaxed text-ink-soft">{children}</div>
+    </Reveal>
   )
 }
 
@@ -86,21 +88,23 @@ export function ImageGallery({
   images: { src: string; alt: string; caption?: string }[]
 }) {
   return (
-    <div className="mt-6 grid gap-6 sm:grid-cols-2">
+    <div className="mt-6 grid gap-5 sm:grid-cols-2">
       {images.map((img) => (
         <figure
           key={img.src}
-          className="overflow-hidden rounded-xl border border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-slate-900/50"
+          className="overflow-hidden rounded-xl border border-line bg-surface"
         >
-          <img
-            src={img.src}
-            alt={img.alt}
-            loading="lazy"
-            decoding="async"
-            className="w-full object-cover"
-          />
+          <div className="img-zoom overflow-hidden">
+            <img
+              src={img.src}
+              alt={img.alt}
+              loading="lazy"
+              decoding="async"
+              className="w-full object-cover"
+            />
+          </div>
           {img.caption && (
-            <figcaption className="px-4 py-3 text-sm text-slate-500 dark:text-slate-400">
+            <figcaption className="border-t border-line px-4 py-3 font-mono text-xs leading-relaxed text-ink-faint">
               {img.caption}
             </figcaption>
           )}
@@ -116,9 +120,9 @@ export function FeatureList({ items }: { items: string[] }) {
       {items.map((item) => (
         <li
           key={item}
-          className="flex gap-2 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm dark:border-white/10 dark:bg-slate-900/40"
+          className="flex gap-2.5 rounded-lg border border-line bg-surface px-4 py-3 text-sm text-ink-soft"
         >
-          <span className="text-sky-500" aria-hidden="true">
+          <span className="mt-0.5 shrink-0 font-mono text-accent" aria-hidden="true">
             ✓
           </span>
           <span>{item}</span>
@@ -134,18 +138,15 @@ export function TechTable({
   rows: { label: string; value: string }[]
 }) {
   return (
-    <div className="mt-4 overflow-hidden rounded-xl border border-slate-200 dark:border-white/10">
+    <div className="mt-4 overflow-hidden rounded-xl border border-line">
       <table className="w-full text-left text-sm">
         <tbody>
           {rows.map((row) => (
-            <tr
-              key={row.label}
-              className="border-b border-slate-200 last:border-0 dark:border-white/10"
-            >
-              <th className="bg-slate-100 px-4 py-3 font-semibold text-slate-900 dark:bg-slate-900/60 dark:text-white">
+            <tr key={row.label} className="border-b border-line last:border-0">
+              <th className="w-2/5 bg-surface-2/60 px-4 py-3 align-top font-mono text-xs font-medium uppercase tracking-wide text-ink-faint">
                 {row.label}
               </th>
-              <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{row.value}</td>
+              <td className="bg-surface px-4 py-3 text-ink-soft">{row.value}</td>
             </tr>
           ))}
         </tbody>
@@ -167,7 +168,7 @@ export function DocLinks({
           href={link.href}
           target={link.external ? '_blank' : undefined}
           rel={link.external ? 'noopener noreferrer' : undefined}
-          className="inline-flex items-center gap-2 rounded-full border border-sky-500/30 bg-sky-500/10 px-5 py-2 text-sm font-semibold text-sky-700 transition hover:bg-sky-500/20 dark:text-sky-400"
+          className="inline-flex items-center gap-2 rounded-md border border-accent/30 bg-accent-bright/10 px-5 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-accent transition hover:bg-accent-bright/20"
         >
           {link.label}
         </a>
@@ -190,13 +191,11 @@ export function SeverityScale() {
       {tiers.map((tier) => (
         <div
           key={tier.level}
-          className="rounded-xl border border-slate-200 bg-white p-4 dark:border-white/10 dark:bg-slate-900/40"
+          className="rounded-xl border border-line bg-surface p-4"
         >
-          <p className="text-xs font-semibold uppercase tracking-wide text-sky-600 dark:text-sky-400">
-            Severity {tier.level}
-          </p>
-          <p className="mt-1 font-semibold text-slate-900 dark:text-white">{tier.name}</p>
-          <p className="text-sm text-slate-500 dark:text-slate-400">{tier.duration}</p>
+          <p className="kicker text-accent">Severity {tier.level}</p>
+          <p className="mt-2 font-display font-semibold text-ink">{tier.name}</p>
+          <p className="mt-0.5 font-mono text-xs text-ink-faint">{tier.duration}</p>
         </div>
       ))}
     </div>
