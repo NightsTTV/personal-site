@@ -113,10 +113,10 @@ export function HomePage() {
           <div className="absolute -inset-4 -z-10 rounded-[1.75rem] bg-[rgb(var(--signal)/0.12)] blur-3xl" />
           <div className="relative rounded-2xl border border-line-strong bg-surface p-2 shadow-[0_30px_60px_-30px_rgb(0_0_0/0.5)]">
             <img
-              src="/me.jpg"
+              src="/me.png"
               alt="Kaspian Thomas"
-              width={560}
-              height={747}
+              width={1427}
+              height={3088}
               className="h-72 w-64 rounded-xl object-cover object-top sm:h-80 sm:w-72 lg:h-[26rem] lg:w-80"
             />
             {/* corner focus brackets */}
@@ -352,10 +352,10 @@ export function HomePage() {
               <div className="relative">
                 <div className="absolute -inset-3 -z-10 rounded-2xl bg-[rgb(var(--signal)/0.1)] blur-2xl" />
                 <img
-                  src="/me.jpg"
+                  src="/me.png"
                   alt="Kaspian Thomas"
-                  width={560}
-                  height={747}
+                  width={1427}
+                  height={3088}
                   loading="lazy"
                   decoding="async"
                   className="h-52 w-52 rounded-2xl border border-line-strong object-cover object-top sm:h-56 sm:w-56"
