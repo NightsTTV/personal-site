@@ -171,7 +171,7 @@ export function HomePage() {
                       className={`flex items-center gap-2 text-right font-mono text-xs ${
                         row.data ? 'text-data' : 'text-ink-soft'
                       }`}
-                    >
+                    > 
                       {row.pulse && (
                         <span
                           aria-hidden="true"
