@@ -1,15 +1,19 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { CommandPalette } from './CommandPalette'
 import { ThemeToggle } from './ThemeToggle'
 import { ChipWidget } from './chip/ChipWidget'
+import { useActiveSection } from '../hooks/useActiveSection'
 import { useTheme } from '../hooks/useTheme'
 
 const navLinks = [
-  { label: 'Home', to: '/' },
-  { label: 'Projects', to: '/#projects' },
-  { label: 'About', to: '/#about' },
-  { label: 'Contact', to: '/#contact' },
+  { label: 'Home', to: '/', id: 'home' },
+  { label: 'Projects', to: '/#projects', id: 'projects' },
+  { label: 'About', to: '/#about', id: 'about' },
+  { label: 'Contact', to: '/#contact', id: 'contact' },
 ]
+
+const sectionIds = navLinks.map((l) => l.id)
 
 function Monogram({ className = '' }: { className?: string }) {
   return (
@@ -37,7 +41,20 @@ function Monogram({ className = '' }: { className?: string }) {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [cmdOpen, setCmdOpen] = useState(false)
   const { theme, toggleTheme } = useTheme()
+  const active = useActiveSection(sectionIds)
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setCmdOpen((o) => !o)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   return (
     <div className="relative min-h-screen text-ink">
@@ -54,7 +71,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       <header className="fixed inset-x-0 top-0 z-50 border-b border-line/80 bg-paper/70 backdrop-blur-xl">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6 lg:px-8">
+        <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5 sm:px-6 lg:px-8">
           <Link
             to="/"
             className="group flex items-center gap-2.5"
@@ -72,14 +89,33 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <li key={link.label}>
                   <Link
                     to={link.to}
-                    className="kicker ul-grow text-ink-faint transition-colors hover:text-ink"
+                    aria-current={active === link.id ? 'true' : undefined}
+                    className={`kicker ul-grow inline-flex items-center gap-1.5 transition-colors ${
+                      active === link.id
+                        ? 'text-ink'
+                        : 'text-ink-faint hover:text-ink'
+                    }`}
                   >
+                    <span
+                      aria-hidden="true"
+                      className={`h-1 w-1 rounded-full bg-accent-bright transition-opacity ${
+                        active === link.id ? 'opacity-100' : 'opacity-0'
+                      }`}
+                    />
                     {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
             <span className="h-5 w-px bg-line-strong" aria-hidden="true" />
+            <button
+              type="button"
+              onClick={() => setCmdOpen(true)}
+              aria-label="Open quick navigation (Command K)"
+              className="inline-flex items-center rounded-md border border-line px-2.5 py-1.5 font-mono text-[0.68rem] text-ink-faint transition hover:border-accent hover:text-accent"
+            >
+              ⌘K
+            </button>
             <ThemeToggle theme={theme} onToggle={toggleTheme} />
             <Link
               to="/#contact"
@@ -137,7 +173,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         )}
       </header>
 
-      <main className="relative pt-[3.75rem]">{children}</main>
+      <main className="relative pt-[3.25rem]">{children}</main>
 
       <footer className="border-t border-line">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-10 sm:flex-row sm:px-6 lg:px-8">
@@ -154,6 +190,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </footer>
 
       <ChipWidget />
+      <CommandPalette open={cmdOpen} onClose={() => setCmdOpen(false)} />
     </div>
   )
 }

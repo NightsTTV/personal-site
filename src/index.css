@@ -3,52 +3,55 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ------------------------------------------------------------------ *
- * Design tokens — "Phosphor Lab"
- * Warm ink base · bone text · restrained lime/chartreuse signal accent.
+ * Design tokens — "Signal Grid"
+ * Neutral near-black base · electric phosphor lime · cyan data hue.
  * Semantic colors are plain CSS vars so they flip automatically in .dark.
  * ------------------------------------------------------------------ */
 :root {
   color-scheme: light;
 
-  --paper: #f4f1e7;        /* page background */
-  --surface: #fbf9f2;      /* raised cards */
-  --surface-2: #ece6d6;    /* sunken panels / table headers */
-  --ink: #181a10;          /* primary text */
-  --ink-soft: #4c4f3c;     /* body text */
-  --ink-faint: #5e6149;    /* meta / captions — AA on all surfaces */
-  --line: #ded7c4;         /* hairline borders */
-  --line-strong: #c9bfa4;  /* stronger dividers */
+  --paper: #fafaf7;        /* page background */
+  --surface: #ffffff;      /* bento cells */
+  --surface-2: #eff1ea;    /* nested panels / table headers */
+  --ink: #171912;          /* primary text */
+  --ink-soft: #4b4f42;     /* body text */
+  --ink-faint: #5d6250;    /* meta / captions — AA on all surfaces */
+  --line: #e2e4da;         /* hairline borders */
+  --line-strong: #c9ccbf;  /* stronger dividers */
 
   --accent: #3a5a0f;       /* deep lime — AA text/link on paper & panels */
   --accent-strong: #2f4a0c;/* hover */
-  --accent-bright: #aadb2f;/* lime fills */
-  --accent-contrast: #1a2706; /* text on bright fills */
-  --signal: 132 204 22;    /* lime-500 rgb — for glows */
+  --accent-bright: #c6f255;/* lime fills */
+  --accent-contrast: #0f1505; /* text on bright fills */
+  --data: #0e7490;         /* stats / status numbers only */
+  --signal: 132 204 22;    /* lime rgb — for glows */
 }
 
 .dark {
   color-scheme: dark;
 
-  --paper: #090c0a;
-  --surface: #10140e;
-  --surface-2: #181d13;
-  --ink: #e9e7da;
-  --ink-soft: #a6ac95;
-  --ink-faint: #8a907a;    /* AA on ink & raised panels */
-  --line: #232a1b;
-  --line-strong: #323a26;
+  --paper: #0a0b09;
+  --surface: #111310;
+  --surface-2: #191c16;
+  --ink: #f2f3ee;
+  --ink-soft: #a8afa0;
+  --ink-faint: #868d7c;    /* AA on ink & raised panels */
+  --line: #23261f;
+  --line-strong: #343830;
 
-  --accent: #c2f163;       /* bright phosphor lime on ink */
-  --accent-strong: #d6f98e;
-  --accent-bright: #c2f163;
-  --accent-contrast: #0a0d0b;
-  --signal: 174 222 84;
+  --accent: #cdf56b;       /* electric phosphor lime on ink */
+  --accent-strong: #def98f;
+  --accent-bright: #c6f255;
+  --accent-contrast: #0f1505;
+  --data: #7dd3fc;
+  --signal: 198 242 85;
 }
 
 @theme inline {
-  --font-display: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
-  --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --color-data: var(--data);
 
   --color-paper: var(--paper);
   --color-surface: var(--surface);
@@ -85,8 +88,8 @@
 
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    font-optical-sizing: auto;
     font-weight: 600;
+    letter-spacing: -0.02em;
   }
 
   ::selection {
@@ -193,6 +196,13 @@
   transform: none;
 }
 
+/* terminal caret after the hero name */
+@keyframes caret-blink {
+  0%, 49%  { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.caret { animation: caret-blink 1.1s steps(1) infinite; }
+
 /* kaspiBOT chat — panel entrance + typing indicator */
 @keyframes chip-panel-in {
   from { opacity: 0; transform: translateY(12px) scale(0.98); }
@@ -239,6 +249,7 @@
   html { scroll-behavior: auto; }
   .rise { animation: none; opacity: 1; }
   .io-reveal { opacity: 1; transform: none; transition: none; }
+  .caret { animation: none; }
   .img-zoom img { transition: none; }
   .chip-panel { animation: none; }
   .chip-dot { animation: none; opacity: 0.6; }
