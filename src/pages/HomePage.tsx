@@ -15,17 +15,67 @@ const focusAreas = [
   'NLP',
 ]
 
+/* Mono status rows for the hero telemetry card — values sourced from site content. */
+const statusRows: { label: string; value: string; data?: boolean; pulse?: boolean }[] = [
+  { label: 'EDU', value: 'B.S. CS · AI/ML — UNO' },
+  { label: 'BASE', value: 'New Orleans, Louisiana' },
+  { label: 'FOCUS', value: 'Evolutionary computation' },
+  { label: 'PROJECTS', value: String(projectSummaries.length).padStart(2, '0'), data: true },
+  { label: 'STATUS', value: 'Building genetic AI systems', pulse: true },
+]
+
+function StatusChip({ status }: { status: string }) {
+  const upcoming = status.toLowerCase().includes('coming')
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[0.68rem] uppercase tracking-wide ${
+        upcoming
+          ? 'border-line bg-surface-2 text-ink-faint'
+          : 'border-accent/30 bg-accent-bright/10 text-accent'
+      }`}
+    >
+      {!upcoming && (
+        <span aria-hidden="true" className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent-bright" />
+      )}
+      {status}
+    </span>
+  )
+}
+
+function Tags({ tags }: { tags: string[] }) {
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {tags.map((tag) => (
+        <span
+          key={tag}
+          className="rounded border border-line bg-surface-2/60 px-2 py-0.5 font-mono text-[0.68rem] text-ink-faint"
+        >
+          {tag}
+        </span>
+      ))}
+    </div>
+  )
+}
+
 export function HomePage() {
+  const featured = projectSummaries.find((p) => p.slug === 'f1')
+  const upcoming = projectSummaries.filter(
+    (p) => p.slug !== 'f1' && p.status.toLowerCase().includes('coming'),
+  )
+  const coursework = projectSummaries.filter(
+    (p) => p.slug !== 'f1' && !p.status.toLowerCase().includes('coming'),
+  )
+
   return (
     <>
       {/* ----------------------------------------------------------------- *
-       * Hero
+       * Hero — 7/5 split: intro | telemetry status card
        * ----------------------------------------------------------------- */}
       <section
         id="home"
-        className="scroll-mt-24 mx-auto flex max-w-6xl flex-col items-start gap-14 px-4 pb-16 pt-12 sm:px-6 sm:pt-16 lg:flex-row lg:items-center lg:justify-between lg:gap-12 lg:px-8 lg:pb-24 lg:pt-24"
+        className="scroll-mt-24 mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-12 sm:px-6 sm:pt-16 lg:grid-cols-12 lg:gap-12 lg:px-8 lg:pb-24 lg:pt-20"
       >
-        <div className="flex-1">
+        <div className="lg:col-span-7">
           <p
             className="rise kicker flex items-center gap-2.5 text-accent"
             style={{ animationDelay: '0ms' }}
@@ -35,28 +85,16 @@ export function HomePage() {
           </p>
 
           <h1
-            className="rise mt-6 font-display text-[2.75rem] font-semibold leading-[1.02] tracking-tight text-ink sm:text-6xl lg:text-7xl"
+            className="rise mt-6 font-display text-[clamp(2.5rem,6vw,4.25rem)] font-semibold leading-[0.98] tracking-tight text-ink"
             style={{ animationDelay: '90ms' }}
           >
             Hi, I&apos;m
             <br />
-            <span className="relative inline-block">
-              Kaspian Thomas
-              <svg
-                className="absolute -bottom-2.5 left-0 h-[0.45em] w-full text-accent sm:-bottom-3.5"
-                viewBox="0 0 320 16"
-                preserveAspectRatio="none"
-                fill="none"
-                aria-hidden="true"
-              >
-                <path
-                  d="M3 10.5C70 4 150 3.5 230 6.5c30 1.1 60 2.5 87 4"
-                  stroke="currentColor"
-                  strokeWidth={4}
-                  strokeLinecap="round"
-                />
-              </svg>
-            </span>
+            Kaspian Thomas
+            <span
+              aria-hidden="true"
+              className="caret ml-2 inline-block h-[0.78em] w-[0.45ch] translate-y-[0.06em] bg-accent-bright"
+            />
           </h1>
 
           <p
@@ -105,34 +143,58 @@ export function HomePage() {
           </div>
         </div>
 
-        {/* Portrait — framed like a technical plate, image untouched */}
-        <div
-          className="rise relative mx-auto shrink-0 lg:mx-0"
-          style={{ animationDelay: '200ms' }}
-        >
-          <div className="absolute -inset-4 -z-10 rounded-[1.75rem] bg-[rgb(var(--signal)/0.12)] blur-3xl" />
-          <div className="relative rounded-2xl border border-line-strong bg-surface p-2 shadow-[0_30px_60px_-30px_rgb(0_0_0/0.5)]">
-            <img
-              src="/me.png"
-              alt="Kaspian Thomas"
-              width={1427}
-              height={3088}
-              className="h-72 w-64 rounded-xl object-cover object-top sm:h-80 sm:w-72 lg:h-[26rem] lg:w-80"
-            />
-            {/* corner focus brackets */}
-            <span aria-hidden="true" className="absolute -left-1.5 -top-1.5 h-5 w-5 rounded-tl-md border-l-2 border-t-2 border-accent" />
-            <span aria-hidden="true" className="absolute -right-1.5 -top-1.5 h-5 w-5 rounded-tr-md border-r-2 border-t-2 border-accent" />
-            <span aria-hidden="true" className="absolute -bottom-1.5 -left-1.5 h-5 w-5 rounded-bl-md border-b-2 border-l-2 border-accent" />
-            <span aria-hidden="true" className="absolute -bottom-1.5 -right-1.5 h-5 w-5 rounded-br-md border-b-2 border-r-2 border-accent" />
+        {/* Telemetry status card — compact portrait + live stat rows */}
+        <div className="rise lg:col-span-5" style={{ animationDelay: '200ms' }}>
+          <div className="relative mx-auto max-w-md lg:max-w-none">
+            <div className="absolute -inset-4 -z-10 rounded-[1.75rem] bg-[rgb(var(--signal)/0.10)] blur-3xl" />
+            <div className="relative rounded-2xl border border-line-strong bg-surface p-2 shadow-[0_30px_60px_-30px_rgb(0_0_0/0.5)]">
+              <div className="overflow-hidden rounded-xl">
+                <img
+                  src="/me-card.jpg"
+                  alt="Kaspian Thomas"
+                  width={900}
+                  height={1947}
+                  fetchPriority="high"
+                  className="h-52 w-full object-cover object-[50%_42%] sm:h-60"
+                />
+              </div>
+              <dl className="px-2.5 pb-1.5">
+                {statusRows.map((row) => (
+                  <div
+                    key={row.label}
+                    className="flex items-baseline justify-between gap-4 border-b border-line py-2.5 last:border-0"
+                  >
+                    <dt className="font-mono text-[0.65rem] tracking-[0.18em] text-ink-faint">
+                      {row.label}
+                    </dt>
+                    <dd
+                      className={`flex items-center gap-2 text-right font-mono text-xs ${
+                        row.data ? 'text-data' : 'text-ink-soft'
+                      }`}
+                    >
+                      {row.pulse && (
+                        <span
+                          aria-hidden="true"
+                          className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent-bright"
+                        />
+                      )}
+                      {row.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+              {/* corner focus brackets */}
+              <span aria-hidden="true" className="absolute -left-1.5 -top-1.5 h-5 w-5 rounded-tl-md border-l-2 border-t-2 border-accent" />
+              <span aria-hidden="true" className="absolute -right-1.5 -top-1.5 h-5 w-5 rounded-tr-md border-r-2 border-t-2 border-accent" />
+              <span aria-hidden="true" className="absolute -bottom-1.5 -left-1.5 h-5 w-5 rounded-bl-md border-b-2 border-l-2 border-accent" />
+              <span aria-hidden="true" className="absolute -bottom-1.5 -right-1.5 h-5 w-5 rounded-br-md border-b-2 border-r-2 border-accent" />
+            </div>
           </div>
-          <p className="mt-4 text-center font-mono text-[0.7rem] uppercase tracking-[0.18em] text-ink-faint">
-            New Orleans, Louisiana
-          </p>
         </div>
       </section>
 
       {/* ----------------------------------------------------------------- *
-       * Projects
+       * Projects — bento: featured F1 row, coursework cells, CHIP ghost
        * ----------------------------------------------------------------- */}
       <section
         id="projects"
@@ -149,87 +211,117 @@ export function HomePage() {
             </SectionHeading>
           </Reveal>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-2">
-            {projectSummaries.map((project, i) => {
-              const index = String(i + 1).padStart(2, '0')
-              const isLink = project.path.startsWith('/projects')
-              const upcoming = project.status.toLowerCase().includes('coming')
-
-              const inner = (
-                <>
-                  <div className="flex items-center justify-between gap-4">
+          {/* Featured — F1 */}
+          {featured && (
+            <Reveal>
+              <Link
+                to={featured.path}
+                className="group mt-12 grid gap-6 rounded-2xl border border-line bg-surface p-6 transition duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_22px_50px_-28px_rgb(var(--signal)/0.55)] sm:p-8 lg:grid-cols-2 lg:items-center"
+              >
+                <div className="flex flex-col items-start">
+                  <div className="flex items-center gap-3">
                     <span className="font-mono text-sm text-ink-faint transition-colors group-hover:text-accent">
-                      {index}
+                      01
                     </span>
-                    <span
-                      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[0.68rem] uppercase tracking-wide ${
-                        upcoming
-                          ? 'border-line bg-surface-2 text-ink-faint'
-                          : 'border-accent/30 bg-accent-bright/10 text-accent'
-                      }`}
-                    >
-                      {!upcoming && (
-                        <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-accent-bright" />
-                      )}
-                      {project.status}
+                    <StatusChip status={featured.status} />
+                    <span className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-data">
+                      Featured
                     </span>
                   </div>
+                  <h3 className="mt-4 font-display text-2xl font-semibold tracking-tight text-ink transition-colors group-hover:text-accent sm:text-3xl">
+                    {featured.title}
+                  </h3>
+                  <p className="mt-3 text-pretty leading-relaxed text-ink-soft">
+                    {featured.description}
+                  </p>
+                  <div className="mt-4">
+                    <Tags tags={featured.tags} />
+                  </div>
+                  <p className="mt-6 inline-flex items-center gap-1.5 font-mono text-[0.72rem] font-semibold uppercase tracking-wider text-accent">
+                    View project details
+                    <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
+                      →
+                    </span>
+                  </p>
+                </div>
+                <div className="overflow-hidden rounded-xl border border-line bg-white p-2">
+                  <img
+                    src="/projects/f1/commentator.png"
+                    alt="The F1 AI commentator delivering a history-grounded line"
+                    width={980}
+                    height={340}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full rounded-lg object-contain transition-transform duration-500 group-hover:scale-[1.02]"
+                  />
+                </div>
+              </Link>
+            </Reveal>
+          )}
 
-                  <h3 className="mt-4 font-display text-xl font-semibold tracking-tight text-ink transition-colors group-hover:text-accent">
+          {/* Coursework cells */}
+          <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {coursework.map((project, i) => (
+              <Reveal key={project.slug} delay={i * 70}>
+                <Link
+                  to={project.path}
+                  className="group relative flex h-full flex-col rounded-2xl border border-line bg-surface p-6 transition duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_22px_50px_-28px_rgb(var(--signal)/0.55)]"
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <span className="font-mono text-sm text-ink-faint transition-colors group-hover:text-accent">
+                      {String(i + 2).padStart(2, '0')}
+                    </span>
+                    <StatusChip status={project.status} />
+                  </div>
+                  <h3 className="mt-4 font-display text-lg font-semibold tracking-tight text-ink transition-colors group-hover:text-accent">
                     {project.title}
                   </h3>
                   <p className="mt-2 flex-1 text-pretty text-sm leading-relaxed text-ink-soft">
                     {project.description}
                   </p>
-
-                  <div className="mt-4 flex flex-wrap gap-1.5">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="rounded border border-line bg-surface-2/60 px-2 py-0.5 font-mono text-[0.68rem] text-ink-faint"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+                  <div className="mt-4">
+                    <Tags tags={project.tags} />
                   </div>
-
-                  {isLink && (
-                    <p className="mt-5 inline-flex items-center gap-1.5 font-mono text-[0.72rem] font-semibold uppercase tracking-wider text-accent">
-                      View project details
-                      <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
-                        →
-                      </span>
-                    </p>
-                  )}
-                </>
-              )
-
-              const base =
-                'group relative flex flex-col rounded-2xl border bg-surface p-6 transition duration-300'
-
-              return (
-                <Reveal key={project.slug} delay={i * 70}>
-                  {isLink ? (
-                    <Link
-                      to={project.path}
-                      className={`${base} border-line hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_22px_50px_-28px_rgb(var(--signal)/0.55)]`}
-                    >
-                      {inner}
-                    </Link>
-                  ) : (
-                    <article className={`${base} border-dashed border-line-strong/70`}>
-                      {inner}
-                    </article>
-                  )}
-                </Reveal>
-              )
-            })}
+                  <p className="mt-5 inline-flex items-center gap-1.5 font-mono text-[0.72rem] font-semibold uppercase tracking-wider text-accent">
+                    View project details
+                    <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
+                      →
+                    </span>
+                  </p>
+                </Link>
+              </Reveal>
+            ))}
           </div>
+
+          {/* In-development ghost strip */}
+          {upcoming.map((project) => (
+            <Reveal key={project.slug}>
+              <article className="mt-5 flex flex-col gap-4 rounded-2xl border border-dashed border-line-strong/70 bg-surface/50 p-6 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-start gap-4 sm:items-center">
+                  <span className="font-mono text-sm text-ink-faint">
+                    {String(projectSummaries.length).padStart(2, '0')}
+                  </span>
+                  <div>
+                    <h3 className="font-display text-lg font-semibold tracking-tight text-ink">
+                      {project.title}
+                    </h3>
+                    <p className="mt-1 text-sm leading-relaxed text-ink-soft">
+                      {project.description}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex shrink-0 items-center gap-3 pl-9 sm:pl-0">
+                  <Tags tags={project.tags} />
+                  <StatusChip status={project.status} />
+                </div>
+              </article>
+            </Reveal>
+          ))}
         </div>
       </section>
 
       {/* ----------------------------------------------------------------- *
-       * About
+       * About — 2-col: community feature | resume + Casper stack
        * ----------------------------------------------------------------- */}
       <section id="about" className="scroll-mt-24 py-16 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -242,100 +334,92 @@ export function HomePage() {
             </SectionHeading>
           </Reveal>
 
-          <Reveal>
-            <h3 className="mt-14 font-display text-2xl font-semibold tracking-tight text-ink">
-              Community &amp; Passions
-            </h3>
-            <p className="mt-2 max-w-2xl text-ink-soft">
-              Outside of code and research, I invest time in the people and communities around me.
-            </p>
+          <div className="mt-12 grid gap-6 lg:grid-cols-5">
+            <Reveal className="lg:col-span-3">
+              <h3 className="font-display text-2xl font-semibold tracking-tight text-ink">
+                Community &amp; Passions
+              </h3>
+              <p className="mt-2 text-ink-soft">
+                Outside of code and research, I invest time in the people and communities around me.
+              </p>
 
-            <figure className="mt-6 overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_20px_50px_-32px_rgb(0_0_0/0.55)]">
-              <div className="img-zoom overflow-hidden">
-                <img
-                  src="/soccer.jpg"
-                  alt="Kaspian Thomas with his youth soccer team"
-                  width={1280}
-                  height={590}
-                  loading="lazy"
-                  decoding="async"
-                  className="aspect-video w-full object-cover"
-                />
-              </div>
-              <figcaption className="relative border-t border-line bg-surface-2/40 p-6 sm:p-8">
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute left-5 top-3 font-display text-6xl leading-none text-accent/30"
-                >
-                  &ldquo;
-                </span>
-                <p className="relative pl-6 font-display text-lg italic leading-relaxed text-ink sm:text-xl">
-                  In my free time I enjoy giving back to the community and coaching youth
-                  sports as a{' '}
-                  <span className="font-semibold not-italic text-accent">
-                    competitive soccer coach
-                  </span>
-                  . This is a second passion of mine and I love to see the players grow and
-                  succeed.
-                </p>
-              </figcaption>
-            </figure>
-          </Reveal>
-
-          {/* Resume */}
-          <Reveal>
-            <div className="mt-8 flex flex-col items-start gap-5 rounded-2xl border border-line bg-surface p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
-              <div>
-                <p className="kicker text-accent">Resume · PDF</p>
-                <h3 className="mt-2 font-display text-xl font-semibold text-ink">
-                  Education, experience &amp; skills
-                </h3>
-                <p className="mt-1 text-sm text-ink-soft">
-                  Download my FULL resume now for education, experience, and skills.
-                </p>
-              </div>
-              <a
-                href={resumeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex shrink-0 items-center gap-2 rounded-md bg-accent-bright px-6 py-3 font-mono text-xs font-semibold uppercase tracking-wider text-accent-contrast transition hover:brightness-105 hover:shadow-[0_0_24px_rgb(var(--signal)/0.4)]"
-              >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-                </svg>
-                Download resume
-              </a>
-            </div>
-          </Reveal>
-
-          {/* Casper */}
-          <Reveal>
-            <div className="mt-8 flex flex-col overflow-hidden rounded-2xl border border-line bg-surface lg:flex-row lg:items-stretch">
-              <div className="flex items-center justify-center bg-surface-2/40 p-6 sm:p-8 lg:w-80 lg:shrink-0">
-                <div className="img-zoom w-full max-w-[17rem] overflow-hidden rounded-2xl border border-line-strong shadow-lg">
+              <figure className="mt-6 overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_20px_50px_-32px_rgb(0_0_0/0.55)]">
+                <div className="img-zoom overflow-hidden">
                   <img
-                    src="/casper-face.jpg"
-                    alt="Casper, a white pit mix, resting with his head on his paw"
-                    width={480}
-                    height={503}
+                    src="/soccer.jpg"
+                    alt="Kaspian Thomas with his youth soccer team"
+                    width={1280}
+                    height={590}
                     loading="lazy"
                     decoding="async"
-                    className="aspect-[6/7] w-full object-cover object-center"
+                    className="aspect-video w-full object-cover"
                   />
                 </div>
-              </div>
-              <div className="flex flex-col justify-center px-6 py-8 sm:px-10 sm:py-10">
-                <p className="kicker text-accent">The good boy</p>
-                <h3 className="mt-3 font-display text-3xl font-semibold tracking-tight text-ink">
-                  Meet Casper
-                </h3>
-                <p className="mt-4 max-w-md text-base leading-relaxed text-ink-soft">
-                  My son Casper is a huge part of my world. This rescued white pit mix is the best
-                  companion a guy could ask for and is always ready for a nap.
-                </p>
-              </div>
+                <figcaption className="border-t border-line bg-surface-2/40 p-6">
+                  <p className="text-pretty leading-relaxed text-ink-soft">
+                    In my free time I enjoy giving back to the community and coaching youth
+                    sports as a{' '}
+                    <span className="font-semibold text-accent">competitive soccer coach</span>.
+                    This is a second passion of mine and I love to see the players grow and
+                    succeed.
+                  </p>
+                </figcaption>
+              </figure>
+            </Reveal>
+
+            <div className="flex flex-col gap-6 lg:col-span-2">
+              {/* Resume */}
+              <Reveal>
+                <div className="rounded-2xl border border-line bg-surface p-6">
+                  <p className="kicker text-accent">Resume · PDF</p>
+                  <h3 className="mt-3 font-display text-xl font-semibold text-ink">
+                    Education, experience &amp; skills
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-ink-soft">
+                    Download my FULL resume now for education, experience, and skills.
+                  </p>
+                  <a
+                    href={resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-md bg-accent-bright px-6 py-3 font-mono text-xs font-semibold uppercase tracking-wider text-accent-contrast transition hover:brightness-105 hover:shadow-[0_0_24px_rgb(var(--signal)/0.4)]"
+                  >
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                    </svg>
+                    Download resume
+                  </a>
+                </div>
+              </Reveal>
+
+              {/* Casper */}
+              <Reveal className="flex-1">
+                <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface">
+                  <div className="img-zoom overflow-hidden border-b border-line">
+                    <img
+                      src="/casper-face.jpg"
+                      alt="Casper, a white pit mix, resting with his head on his paw"
+                      width={480}
+                      height={503}
+                      loading="lazy"
+                      decoding="async"
+                      className="aspect-[16/10] w-full object-cover object-[50%_35%]"
+                    />
+                  </div>
+                  <div className="flex flex-1 flex-col justify-center p-6">
+                    <p className="kicker text-accent">The good boy</p>
+                    <h3 className="mt-3 font-display text-2xl font-semibold tracking-tight text-ink">
+                      Meet Casper
+                    </h3>
+                    <p className="mt-3 text-sm leading-relaxed text-ink-soft">
+                      My son Casper is a huge part of my world. This rescued white pit mix is the
+                      best companion a guy could ask for and is always ready for a nap.
+                    </p>
+                  </div>
+                </div>
+              </Reveal>
             </div>
-          </Reveal>
+          </div>
         </div>
       </section>
 
@@ -347,30 +431,30 @@ export function HomePage() {
         className="scroll-mt-24 border-t border-line bg-surface-2/30 py-16 sm:py-24"
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,17rem)_1fr] lg:gap-16">
-            <Reveal className="flex flex-col items-center gap-6 lg:items-stretch">
+          <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,16rem)_1fr] lg:gap-16">
+            <Reveal className="flex flex-col items-center gap-5 lg:items-stretch">
               <div className="relative">
                 <div className="absolute -inset-3 -z-10 rounded-2xl bg-[rgb(var(--signal)/0.1)] blur-2xl" />
                 <img
-                  src="/me.png"
+                  src="/me-card.jpg"
                   alt="Kaspian Thomas"
-                  width={1427}
-                  height={3088}
+                  width={900}
+                  height={1947}
                   loading="lazy"
                   decoding="async"
-                  className="h-52 w-52 rounded-2xl border border-line-strong object-cover object-top sm:h-56 sm:w-56"
+                  className="h-48 w-48 rounded-2xl border border-line-strong object-cover object-[50%_30%] sm:h-52 sm:w-52"
                 />
               </div>
 
               <ExternalLink
                 href={GITHUB_URL}
                 aria-label="GitHub profile — NightsTTV"
-                className="group flex w-full max-w-[14rem] flex-col items-center rounded-2xl border border-line bg-surface px-6 py-5 transition hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-[0_18px_40px_-24px_rgb(var(--signal)/0.5)] sm:w-56 sm:max-w-none"
+                className="group flex w-full max-w-[13rem] flex-col items-center rounded-2xl border border-line bg-surface px-6 py-5 transition hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-[0_18px_40px_-24px_rgb(var(--signal)/0.5)] sm:max-w-none"
               >
                 <img
                   src={githubImg}
                   alt=""
-                  className="h-12 w-12 object-contain transition group-hover:scale-110"
+                  className="h-11 w-11 object-contain transition group-hover:scale-110"
                 />
                 <span className="mt-3 font-mono text-sm font-semibold text-ink transition group-hover:text-accent">
                   @NightsTTV
