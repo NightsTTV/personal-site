@@ -7,6 +7,7 @@ import { UnoProjectPage } from './pages/UnoProjectPage'
 import { ChattyProjectPage } from './pages/ChattyProjectPage'
 import { BioBERTProjectPage } from './pages/BioBERTProjectPage'
 import { ChipProjectPage } from './pages/ChipProjectPage'
+import { HotworxProjectPage } from './pages/HotworxProjectPage'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/projects/chatty" element={<ChattyProjectPage />} />
         <Route path="/projects/biobert" element={<BioBERTProjectPage />} />
         <Route path="/projects/chip" element={<ChipProjectPage />} />
+        <Route path="/projects/hotworx" element={<HotworxProjectPage />} />
       </Routes>
     </Layout>
   )
