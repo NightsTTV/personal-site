@@ -223,6 +223,14 @@
   animation: chip-blink 1.2s ease-in-out infinite;
 }
 
+/* projects scroll view — focus rail card slide/fade */
+.rail-card {
+  will-change: transform, opacity;
+  transition:
+    transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1),
+    opacity 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
 /* kaspiBOT mascot — smooth pop-out tied to mouse closeness */
 .kaspibot-sprite {
   will-change: transform, opacity;
@@ -251,6 +259,7 @@
   .io-reveal { opacity: 1; transform: none; transition: none; }
   .caret { animation: none; }
   .img-zoom img { transition: none; }
+  .rail-card { transition: none; }
   .chip-panel { animation: none; }
   .chip-dot { animation: none; opacity: 0.6; }
   .kaspibot-sprite { transition: none; }

@@ -11,6 +11,7 @@ export function useActiveSection(ids: readonly string[]) {
 
   useEffect(() => {
     if (pathname !== '/') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional reset when leaving the home page
       setActive(null)
       return
     }

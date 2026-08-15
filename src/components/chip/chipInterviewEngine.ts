@@ -180,7 +180,7 @@ export function reflect(text: string): string {
   for (const k of keys) {
     const v = REFLECTIONS[k];
     if (/[A-Za-z0-9']/.test(k)) {
-      const escapedKey = k.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+      const escapedKey = k.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
       const pattern = new RegExp(`\\b${escapedKey}\\b`, 'g');
       s = s.replace(pattern, v);
     } else {
@@ -286,7 +286,7 @@ export function getNextStateAndReply(input: string, state: InterviewState): Proc
 
     // Check exit words
     const lowerWords = trimmedInput.toLowerCase().split(/\s+/);
-    const hasExitWord = lowerWords.some(w => EXIT_WORDS.has(w.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "")));
+    const hasExitWord = lowerWords.some(w => EXIT_WORDS.has(w.replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "")));
     if (hasExitWord) {
       nextState.phase = 'exit';
       return {

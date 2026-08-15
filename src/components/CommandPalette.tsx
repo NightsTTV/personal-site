@@ -52,6 +52,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
   // reset + focus on open (setTimeout, not rAF — rAF stalls in hidden tabs)
   useEffect(() => {
     if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional reset when the palette opens
       setQuery('')
       setSel(0)
       const t = setTimeout(() => inputRef.current?.focus(), 0)

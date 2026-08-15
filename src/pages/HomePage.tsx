@@ -1,10 +1,10 @@
-import { Link } from 'react-router-dom'
 import githubImg from '../assets/github.png'
 import resumeUrl from '../assets/Resume26.pdf'
 import { ContactIcon } from '../components/ContactIcon'
 import { ExternalLink } from '../components/ExternalLink'
 import { Reveal } from '../components/Reveal'
 import { SectionHeading } from '../components/SectionHeading'
+import { ProjectsSection } from '../components/project/ProjectsSection'
 import { GITHUB_URL, LINKEDIN_URL } from '../constants/links'
 import { projectSummaries } from '../data/projects'
 
@@ -24,48 +24,7 @@ const statusRows: { label: string; value: string; data?: boolean; pulse?: boolea
   { label: 'STATUS', value: 'Building genetic AI systems', pulse: true },
 ]
 
-function StatusChip({ status }: { status: string }) {
-  const upcoming = status.toLowerCase().includes('coming')
-  return (
-    <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[0.68rem] uppercase tracking-wide ${
-        upcoming
-          ? 'border-line bg-surface-2 text-ink-faint'
-          : 'border-accent/30 bg-accent-bright/10 text-accent'
-      }`}
-    >
-      {!upcoming && (
-        <span aria-hidden="true" className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent-bright" />
-      )}
-      {status}
-    </span>
-  )
-}
-
-function Tags({ tags }: { tags: string[] }) {
-  return (
-    <div className="flex flex-wrap gap-1.5">
-      {tags.map((tag) => (
-        <span
-          key={tag}
-          className="rounded border border-line bg-surface-2/60 px-2 py-0.5 font-mono text-[0.68rem] text-ink-faint"
-        >
-          {tag}
-        </span>
-      ))}
-    </div>
-  )
-}
-
 export function HomePage() {
-  const featured = projectSummaries.find((p) => p.slug === 'f1')
-  const upcoming = projectSummaries.filter(
-    (p) => p.slug !== 'f1' && p.status.toLowerCase().includes('coming'),
-  )
-  const coursework = projectSummaries.filter(
-    (p) => p.slug !== 'f1' && !p.status.toLowerCase().includes('coming'),
-  )
-
   return (
     <>
       {/* ----------------------------------------------------------------- *
@@ -193,132 +152,7 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* ----------------------------------------------------------------- *
-       * Projects — bento: featured F1 row, coursework cells, CHIP ghost
-       * ----------------------------------------------------------------- */}
-      <section
-        id="projects"
-        className="scroll-mt-24 border-y border-line bg-surface-2/30 py-16 sm:py-24"
-      >
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <Reveal>
-            <SectionHeading kicker="01 — Selected work" title="Projects">
-              <p>
-                A portfolio of coursework and research. Click on any project for the full
-                architecture details, screenshots, and documentation. See Contact for more
-                information, including links to repositories and other relevant information.
-              </p>
-            </SectionHeading>
-          </Reveal>
-
-          {/* Featured — F1 */}
-          {featured && (
-            <Reveal>
-              <Link
-                to={featured.path}
-                className="group mt-12 grid gap-6 rounded-2xl border border-line bg-surface p-6 transition duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_22px_50px_-28px_rgb(var(--signal)/0.55)] sm:p-8 lg:grid-cols-2 lg:items-center"
-              >
-                <div className="flex flex-col items-start">
-                  <div className="flex items-center gap-3">
-                    <span className="font-mono text-sm text-ink-faint transition-colors group-hover:text-accent">
-                      01
-                    </span>
-                    <StatusChip status={featured.status} />
-                    <span className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-data">
-                      Featured
-                    </span>
-                  </div>
-                  <h3 className="mt-4 font-display text-2xl font-semibold tracking-tight text-ink transition-colors group-hover:text-accent sm:text-3xl">
-                    {featured.title}
-                  </h3>
-                  <p className="mt-3 text-pretty leading-relaxed text-ink-soft">
-                    {featured.description}
-                  </p>
-                  <div className="mt-4">
-                    <Tags tags={featured.tags} />
-                  </div>
-                  <p className="mt-6 inline-flex items-center gap-1.5 font-mono text-[0.72rem] font-semibold uppercase tracking-wider text-accent">
-                    View project details
-                    <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
-                      →
-                    </span>
-                  </p>
-                </div>
-                <div className="overflow-hidden rounded-xl border border-line bg-white p-2">
-                  <img
-                    src="/projects/f1/commentator.png"
-                    alt="The F1 AI commentator delivering a history-grounded line"
-                    width={980}
-                    height={340}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full rounded-lg object-contain transition-transform duration-500 group-hover:scale-[1.02]"
-                  />
-                </div>
-              </Link>
-            </Reveal>
-          )}
-
-          {/* Coursework cells */}
-          <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {coursework.map((project, i) => (
-              <Reveal key={project.slug} delay={i * 70}>
-                <Link
-                  to={project.path}
-                  className="group relative flex h-full flex-col rounded-2xl border border-line bg-surface p-6 transition duration-300 hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_22px_50px_-28px_rgb(var(--signal)/0.55)]"
-                >
-                  <div className="flex items-center justify-between gap-4">
-                    <span className="font-mono text-sm text-ink-faint transition-colors group-hover:text-accent">
-                      {String(i + 2).padStart(2, '0')}
-                    </span>
-                    <StatusChip status={project.status} />
-                  </div>
-                  <h3 className="mt-4 font-display text-lg font-semibold tracking-tight text-ink transition-colors group-hover:text-accent">
-                    {project.title}
-                  </h3>
-                  <p className="mt-2 flex-1 text-pretty text-sm leading-relaxed text-ink-soft">
-                    {project.description}
-                  </p>
-                  <div className="mt-4">
-                    <Tags tags={project.tags} />
-                  </div>
-                  <p className="mt-5 inline-flex items-center gap-1.5 font-mono text-[0.72rem] font-semibold uppercase tracking-wider text-accent">
-                    View project details
-                    <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">
-                      →
-                    </span>
-                  </p>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-
-          {/* In-development ghost strip */}
-          {upcoming.map((project) => (
-            <Reveal key={project.slug}>
-              <article className="mt-5 flex flex-col gap-4 rounded-2xl border border-dashed border-line-strong/70 bg-surface/50 p-6 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-start gap-4 sm:items-center">
-                  <span className="font-mono text-sm text-ink-faint">
-                    {String(projectSummaries.length).padStart(2, '0')}
-                  </span>
-                  <div>
-                    <h3 className="font-display text-lg font-semibold tracking-tight text-ink">
-                      {project.title}
-                    </h3>
-                    <p className="mt-1 text-sm leading-relaxed text-ink-soft">
-                      {project.description}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex shrink-0 items-center gap-3 pl-9 sm:pl-0">
-                  <Tags tags={project.tags} />
-                  <StatusChip status={project.status} />
-                </div>
-              </article>
-            </Reveal>
-          ))}
-        </div>
-      </section>
+      <ProjectsSection />
 
       {/* ----------------------------------------------------------------- *
        * About — 2-col: community feature | resume + Casper stack
