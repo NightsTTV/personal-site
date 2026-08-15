@@ -56,16 +56,6 @@ export function HomePage() {
             />
           </h1>
 
-          <p
-            className="rise mt-7 max-w-xl text-pretty text-lg leading-relaxed text-ink-soft"
-            style={{ animationDelay: '180ms' }}
-          >
-            I am currently an undergraduate at UNO studying computer science (AI/ML).
-            I am fascinated by the crossroad of evolutionary computation and artificial
-            intelligence. My goal is to build genetic AI systems that operate beyond
-            human constraints of time.
-          </p>
-
           <ul
             className="rise mt-7 flex flex-wrap gap-x-2 gap-y-2"
             style={{ animationDelay: '240ms' }}
@@ -279,7 +269,17 @@ export function HomePage() {
                   className="h-48 w-48 rounded-2xl border border-line-strong object-cover object-[50%_30%] sm:h-52 sm:w-52"
                 />
               </div>
-
+        
+          <p
+            className="rise mt-7 max-w-xl text-pretty text-lg leading-relaxed text-ink-soft"
+            style={{ animationDelay: '180ms' }}
+          > {/*       <span style={{ color: '#CDFF70' }}></span>   */}
+            Undergraduate at UNO studying computer science <span style={{ color: '#CDFF70' }}>(AI/ML)</span>.
+            I am fascinated by the crossroad of evolutionary computation and artificial
+            intelligence. <span style={{ color: '#CDFF70' }}>Empowering communities worldwide </span>  
+            by developing  <span style={{ color: '#CDFF70' }}>efficient open-source</span> tools that <span style={{ color: '#CDFF70' }}>bridge the gap</span> for independent contractors, AI 
+            engineers, and educators alike.
+          </p>
               <ExternalLink
                 href={GITHUB_URL}
                 aria-label="GitHub profile — NightsTTV"
