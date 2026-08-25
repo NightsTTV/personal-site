@@ -85,11 +85,33 @@ export function HomePage() {
       <section id="colophon" className="scroll-mt-24 py-16 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <Reveal>
-            <SectionHeading kicker="03 — Colophon" title="Notes Dispatch">
-              <p>
-                The operator behind the systems.
-              </p>
-            </SectionHeading>
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+              <SectionHeading kicker="03 — Colophon" title="Notes Dispatch">
+                <p>The operator behind the systems.</p>
+              </SectionHeading>
+              {/* Operator + sidekick, on duty */}
+              <div className="flex shrink-0 gap-3">
+                {[
+                  { src: '/operator.jpg', alt: 'Kaspian Thomas — headshot', caption: 'OPERATOR' },
+                  { src: '/sidekick-casper.jpg', alt: 'Casper, the resident sidekick, off shift', caption: 'SIDEKICK · CASPER' },
+                ].map((img) => (
+                  <figure key={img.caption} className="w-28 sm:w-32">
+                    <img
+                      src={img.src}
+                      alt={img.alt}
+                      width={128}
+                      height={128}
+                      loading="lazy"
+                      decoding="async"
+                      className="aspect-square w-full border border-line-strong object-cover grayscale transition duration-300 hover:grayscale-0"
+                    />
+                    <figcaption className="mt-1.5 font-mono text-[0.58rem] tracking-[0.2em] text-ink-faint">
+                      {img.caption}
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
           </Reveal>
 
           <div className="mt-12 grid gap-10 lg:grid-cols-12">
