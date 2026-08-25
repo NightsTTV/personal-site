@@ -11,8 +11,8 @@ import {
 export function BioBERTProjectPage() {
   return (
     <ProjectPageLayout
-      title="BioBERT — Soccer Injury Severity Classification"
-      subtitle="Applying a biomedical language model to predict recovery severity from Premier League injury reports using stratified fine-tuning and multi-class NLP evaluation."
+      title="Clinical-Text Injury Triage — Five-Tier Severity Classification"
+      subtitle="Fine-tuning a biomedical language model to classify Premier League injury reports into five recovery-severity tiers — stratified fine-tuning with per-class evaluation, not aggregate accuracy theater."
       tags={['Python', 'BioBERT', 'PyTorch', 'Transformers', 'NLP']}
       heroImage={{
         src: '/projects/biobert/image8.jpg',

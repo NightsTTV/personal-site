@@ -7,10 +7,9 @@ import { useActiveSection } from '../hooks/useActiveSection'
 import { useTheme } from '../hooks/useTheme'
 
 const navLinks = [
-  { label: 'Home', to: '/', id: 'home' },
-  { label: 'Projects', to: '/#projects', id: 'projects' },
-  { label: 'About', to: '/#about', id: 'about' },
-  { label: 'Contact', to: '/#contact', id: 'contact' },
+  { label: 'Index', to: '/', id: 'home' },
+  { label: 'Work', to: '/#projects', id: 'projects' },
+  { label: 'Colophon', to: '/#colophon', id: 'colophon' },
 ]
 
 const sectionIds = navLinks.map((l) => l.id)
@@ -66,8 +65,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div
           className="bg-lattice absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_70%)]"
         />
-        <div className="absolute -top-48 left-1/2 h-[620px] w-[min(960px,120vw)] -translate-x-1/2 rounded-full bg-[rgb(var(--signal)/0.10)] blur-[130px]" />
-        <div className="absolute right-[-10%] top-1/3 h-[420px] w-[420px] rounded-full bg-[rgb(var(--signal)/0.05)] blur-[120px]" />
       </div>
 
       <header className="fixed inset-x-0 top-0 z-50 border-b border-line/80 bg-paper/70 backdrop-blur-xl">
@@ -118,8 +115,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </button>
             <ThemeToggle theme={theme} onToggle={toggleTheme} />
             <Link
-              to="/#contact"
-              className="rounded-md bg-accent-bright px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-accent-contrast transition hover:brightness-105 hover:shadow-[0_0_24px_rgb(var(--signal)/0.45)]"
+              to="/#colophon"
+              className="border border-line-strong px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-ink transition hover:border-accent hover:text-accent"
             >
               Get in touch
             </Link>
@@ -163,7 +160,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               ))}
             </ul>
             <Link
-              to="/#contact"
+              to="/#colophon"
               className="mt-3 block rounded-md bg-accent-bright px-5 py-2.5 text-center font-mono text-xs font-semibold uppercase tracking-wider text-accent-contrast transition hover:brightness-105"
               onClick={() => setMenuOpen(false)}
             >

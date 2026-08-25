@@ -33,8 +33,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
     return [
       { label: 'Home', hint: 'SECTION', run: go('/') },
       { label: 'Projects', hint: 'SECTION', run: go('/#projects') },
-      { label: 'About', hint: 'SECTION', run: go('/#about') },
-      { label: 'Contact', hint: 'SECTION', run: go('/#contact') },
+      { label: 'Colophon / Contact', hint: 'SECTION', run: go('/#colophon') },
       ...projectSummaries
         .filter((p) => p.path.startsWith('/projects'))
         .map((p) => ({ label: p.title, hint: 'PROJECT', run: go(p.path) })),

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { ReactNode } from 'react'
 import { Reveal } from '../Reveal'
+import { TagLine } from './ProjectMeta'
 
 type ProjectPageLayoutProps = {
   title: string
@@ -28,17 +29,8 @@ export function ProjectPageLayout({
         </Link>
 
         <header className="mt-8">
-          <div className="flex flex-wrap gap-1.5">
-            {tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded border border-line bg-surface-2/60 px-2 py-0.5 font-mono text-[0.68rem] text-ink-faint"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-          <h1 className="mt-5 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl lg:text-5xl">
+          <TagLine tags={tags} />
+          <h1 className="mt-5 font-display text-3xl tracking-tight text-ink sm:text-4xl lg:text-5xl">
             {title}
           </h1>
           <p className="mt-4 max-w-3xl text-pretty text-lg leading-relaxed text-ink-soft">
@@ -47,7 +39,7 @@ export function ProjectPageLayout({
         </header>
 
         {heroImage && (
-          <div className="mt-10 overflow-hidden rounded-2xl border border-line-strong bg-surface p-2 shadow-[0_30px_60px_-32px_rgb(0_0_0/0.55)]">
+          <div className="mt-10 overflow-hidden border border-line-strong bg-surface p-2">
             <img
               src={heroImage.src}
               alt={heroImage.alt}
@@ -73,8 +65,8 @@ export function ProjectSection({
 }) {
   return (
     <Reveal as="section">
-      <h2 className="flex items-center gap-3 font-display text-2xl font-semibold tracking-tight text-ink">
-        <span aria-hidden="true" className="h-6 w-1 shrink-0 rounded-full bg-accent-bright" />
+      <h2 className="flex items-center gap-3 font-display text-2xl tracking-tight text-ink">
+        <span aria-hidden="true" className="h-6 w-1 shrink-0 bg-accent-bright" />
         {title}
       </h2>
       <div className="mt-4 space-y-4 leading-relaxed text-ink-soft">{children}</div>
