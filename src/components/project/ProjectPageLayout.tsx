@@ -20,7 +20,7 @@ export function ProjectPageLayout({
 }: ProjectPageLayoutProps) {
   return (
     <article className="scroll-mt-24 pb-16 pt-6 sm:pb-24">
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+      <div className="shell mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <Link
           to="/#projects"
           className="kicker inline-flex items-center gap-2 text-ink-faint transition-colors hover:text-accent"

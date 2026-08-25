@@ -168,6 +168,12 @@
   /* image zoom-on-hover wrapper */
   .img-zoom img { transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
   .img-zoom:hover img { transform: scale(1.04); }
+
+  /* Docked dossier mode (contact rail open): content shells stretch into the
+     freed space so the page shows no dead margins — see Layout data-dock. */
+  @media (min-width: 1024px) {
+    [data-dock='open'] .shell { max-width: none; }
+  }
 }
 
 /* ------------------------------------------------------------------ *
@@ -210,7 +216,7 @@
 }
 
 .chip-panel {
-  transform-origin: bottom left;
+  transform-origin: bottom right;
   animation: chip-panel-in 0.28s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 

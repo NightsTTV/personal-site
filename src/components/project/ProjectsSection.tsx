@@ -17,7 +17,7 @@ export function ProjectsSection() {
       id="projects"
       className="scroll-mt-24 border-y border-line bg-surface-2/30 py-16 sm:py-24"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="shell mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <Reveal>
           <SectionHeading kicker="01 — Selected work" title="Case Studies &amp; Systems Log">
             <p>

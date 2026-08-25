@@ -3,15 +3,26 @@ import { Link } from 'react-router-dom'
 import { CommandPalette } from './CommandPalette'
 import { ThemeToggle } from './ThemeToggle'
 import { ChipWidget } from './chip/ChipWidget'
+import { OperatorDossier } from './dossier/OperatorDossier'
 import { useActiveSection } from '../hooks/useActiveSection'
 import { useTheme } from '../hooks/useTheme'
+
+/**
+ * Docked dossier layout (goal: About & Colophon refactor):
+ *  - "get in touch" selected (default on desktop) → index/work fill the left,
+ *    the Operator Dossier docks into a right-hand rail — no dead margins.
+ *  - Unselected → classic centered layout, contact card hidden until reopened
+ *    from the nav CTA / ⌘K palette.
+ *  - kaspiBOT stays pinned bottom-right in both states.
+ */
 
 const navLinks = [
   { label: 'Index', to: '/', id: 'home' },
   { label: 'Work', to: '/#projects', id: 'projects' },
-  { label: 'Colophon', to: '/#colophon', id: 'colophon' },
 ]
 
+// Scroll-spy only tracks real page sections — the dossier rail is a persistent
+// overlay-style panel, not something the viewport band should highlight.
 const sectionIds = navLinks.map((l) => l.id)
 
 function Monogram({ className = '' }: { className?: string }) {
@@ -43,6 +54,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [cmdOpen, setCmdOpen] = useState(false)
   const { theme, toggleTheme } = useTheme()
   const active = useActiveSection(sectionIds)
+  // Dossier defaults open where a rail fits (desktop); hidden behind the CTA on mobile.
+  const [contactOpen, setContactOpen] = useState(
+    () => typeof window === 'undefined' || window.innerWidth >= 1024,
+  )
+
+  const openContact = () => {
+    setContactOpen(true)
+    setMenuOpen(false)
+  }
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -56,26 +76,27 @@ export function Layout({ children }: { children: React.ReactNode }) {
   }, [])
 
   return (
-    <div className="relative min-h-screen text-ink">
-      {/* Atmosphere: phosphor glow · dot lattice · grain */}
+    <div
+      className="relative min-h-screen text-ink"
+      data-dock={contactOpen ? 'open' : 'closed'}
+    >
+      {/* Atmosphere: dot lattice · grain */}
       <div
         aria-hidden="true"
         className="grain pointer-events-none fixed inset-0 -z-10 overflow-hidden"
       >
-        <div
-          className="bg-lattice absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_70%)]"
-        />
+        <div className="bg-lattice absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_70%)]" />
       </div>
 
       <header className="fixed inset-x-0 top-0 z-50 border-b border-line/80 bg-paper/70 backdrop-blur-xl">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5 sm:px-6 lg:px-8">
+        <nav className="mx-auto flex max-w-full items-center justify-between gap-4 px-4 py-2.5 sm:px-6 lg:px-8">
           <Link
             to="/"
             className="group flex items-center gap-2.5"
             aria-label="Kaspian Thomas — home"
           >
             <Monogram className="h-6 w-6 shrink-0 transition-transform duration-300 group-hover:rotate-[-6deg]" />
-            <span className="font-display text-lg font-semibold tracking-tight text-ink">
+            <span className="font-display text-lg tracking-tight text-ink">
               Kaspian Thomas
             </span>
           </Link>
@@ -103,6 +124,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   </Link>
                 </li>
               ))}
+              <li>
+                <button
+                  type="button"
+                  onClick={openContact}
+                  aria-expanded={contactOpen}
+                  className={`kicker ul-grow inline-flex items-center gap-1.5 transition-colors ${
+                    contactOpen ? 'text-accent' : 'text-ink-faint hover:text-ink'
+                  }`}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`h-1 w-1 rounded-full bg-accent-bright transition-opacity ${
+                      contactOpen ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  />
+                  Colophon
+                </button>
+              </li>
             </ul>
             <span className="h-5 w-px bg-line-strong" aria-hidden="true" />
             <button
@@ -114,12 +153,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
               ⌘K
             </button>
             <ThemeToggle theme={theme} onToggle={toggleTheme} />
-            <Link
-              to="/#colophon"
-              className="border border-line-strong px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-ink transition hover:border-accent hover:text-accent"
+            <button
+              type="button"
+              onClick={() => setContactOpen((o) => !o)}
+              aria-pressed={contactOpen}
+              className={`border px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider transition ${
+                contactOpen
+                  ? 'border-accent bg-accent-bright text-accent-contrast hover:brightness-105'
+                  : 'border-line-strong text-ink hover:border-accent hover:text-accent'
+              }`}
             >
               Get in touch
-            </Link>
+            </button>
           </div>
 
           <div className="flex items-center gap-1 md:hidden">
@@ -158,22 +203,64 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   </Link>
                 </li>
               ))}
+              <li>
+                <button
+                  type="button"
+                  onClick={openContact}
+                  aria-expanded={contactOpen}
+                  className="block w-full rounded-lg px-3 py-2.5 text-left font-mono text-xs uppercase tracking-wider text-ink-soft transition hover:bg-surface-2 hover:text-ink"
+                >
+                  Colophon
+                </button>
+              </li>
             </ul>
-            <Link
-              to="/#colophon"
-              className="mt-3 block rounded-md bg-accent-bright px-5 py-2.5 text-center font-mono text-xs font-semibold uppercase tracking-wider text-accent-contrast transition hover:brightness-105"
-              onClick={() => setMenuOpen(false)}
+            <button
+              type="button"
+              onClick={() => setContactOpen((o) => !o)}
+              aria-pressed={contactOpen}
+              className="mt-3 block w-full border border-line-strong px-5 py-2.5 text-center font-mono text-xs font-semibold uppercase tracking-wider text-ink transition hover:border-accent hover:text-accent"
             >
               Get in touch
-            </Link>
+            </button>
           </div>
         )}
       </header>
 
-      <main className="relative pt-[3.25rem]">{children}</main>
+      {/* Docked split: index/work left · dossier rail right */}
+      <div className="relative mx-auto flex w-full max-w-[110rem] items-start">
+        <main className="relative min-w-0 flex-1 pt-[3.25rem]">{children}</main>
 
-      <footer className="border-t border-line">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-10 sm:flex-row sm:px-6 lg:px-8">
+        <aside
+          id="colophon"
+          aria-label="Operator dossier — links and contact"
+          className="sticky top-[3.25rem] hidden max-h-[calc(100vh-3.25rem)] w-[24rem] shrink-0 overflow-y-auto p-4 lg:block xl:w-[26.5rem] xl:p-6"
+        >
+          <OperatorDossier onClose={() => setContactOpen(false)} />
+        </aside>
+      </div>
+
+      {/* Mobile drawer — same dossier, slides over content */}
+      {contactOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Operator dossier — links and contact"
+          className="fixed inset-0 z-[55] lg:hidden"
+        >
+          <button
+            type="button"
+            aria-label="Close contact card"
+            onClick={() => setContactOpen(false)}
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+          />
+          <div className="absolute inset-y-0 right-0 w-[min(26rem,calc(100vw-1.5rem))] overflow-y-auto p-3">
+            <OperatorDossier onClose={() => setContactOpen(false)} />
+          </div>
+        </div>
+      )}
+
+      <footer className="relative border-t border-line">
+        <div className="flex max-w-none flex-col items-center justify-between gap-4 px-4 py-10 sm:flex-row sm:px-6 lg:px-8">
           <div className="flex items-center gap-2.5">
             <Monogram className="h-5 w-5" />
             <p className="font-mono text-xs text-ink-faint">
@@ -187,7 +274,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </footer>
 
       <ChipWidget />
-      <CommandPalette open={cmdOpen} onClose={() => setCmdOpen(false)} />
+      <CommandPalette
+        open={cmdOpen}
+        onClose={() => setCmdOpen(false)}
+        onContact={openContact}
+      />
     </div>
   )
 }

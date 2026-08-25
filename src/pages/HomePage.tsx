@@ -1,9 +1,4 @@
-import { Reveal } from '../components/Reveal'
-import { SectionHeading } from '../components/SectionHeading'
 import { ProjectsSection } from '../components/project/ProjectsSection'
-import { GITHUB_URL, LINKEDIN_URL } from '../constants/links'
-import { ExternalLink } from '../components/ExternalLink'
-import resumeUrl from '../assets/Resume26.pdf'
 
 const heroStats: { label: string; value: string; data?: boolean }[] = [
   { label: 'FOCUS', value: 'Evolutionary computation · genetic AI', data: true },
@@ -20,7 +15,7 @@ export function HomePage() {
        * ----------------------------------------------------------------- */}
       <section
         id="home"
-        className="scroll-mt-24 mx-auto max-w-6xl px-4 pb-16 pt-12 sm:px-6 sm:pt-20 lg:px-8 lg:pb-24 lg:pt-28"
+        className="shell scroll-mt-24 mx-auto max-w-6xl px-4 pb-16 pt-12 sm:px-6 sm:pt-20 lg:px-8 lg:pb-24 lg:pt-28"
       >
         <div className="max-w-4xl">
           <p
@@ -79,130 +74,6 @@ export function HomePage() {
 
       <ProjectsSection />
 
-      {/* ----------------------------------------------------------------- *
-       * Colophon / Notes Dispatch — restrained, at the base of the page
-       * ----------------------------------------------------------------- */}
-      <section id="colophon" className="scroll-mt-24 py-16 sm:py-24">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <Reveal>
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-              <SectionHeading kicker="03 — Colophon" title="Notes Dispatch">
-                <p>The operator behind the systems.</p>
-              </SectionHeading>
-              {/* Operator + sidekick, on duty */}
-              <div className="flex shrink-0 gap-3">
-                {[
-                  { src: '/operator.jpg', alt: 'Kaspian Thomas — headshot', caption: 'OPERATOR' },
-                  { src: '/sidekick-casper.jpg', alt: 'Casper, the resident sidekick, off shift', caption: 'SIDEKICK · CASPER' },
-                ].map((img) => (
-                  <figure key={img.caption} className="w-28 sm:w-32">
-                    <img
-                      src={img.src}
-                      alt={img.alt}
-                      width={128}
-                      height={128}
-                      loading="lazy"
-                      decoding="async"
-                      className="aspect-square w-full border border-line-strong object-cover grayscale transition duration-300 hover:grayscale-0"
-                    />
-                    <figcaption className="mt-1.5 font-mono text-[0.58rem] tracking-[0.2em] text-ink-faint">
-                      {img.caption}
-                    </figcaption>
-                  </figure>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-
-          <div className="mt-12 grid gap-10 lg:grid-cols-12">
-            {/* Notes column */}
-            <Reveal className="lg:col-span-7">
-              <div className="space-y-5 border-l-2 border-line pl-6 leading-relaxed text-ink-soft">
-                <p>
-                  From <strong>Houma, Louisiana</strong> — bayou roots, New Orleans
-                  base. Undergraduate in computer science (AI/ML) at the University
-                  of New Orleans; the research interests above are not a phase, they
-                  are the throughline.
-                </p>
-                <p>
-                  Off the keyboard: head coach for competitive youth soccer. Teaching
-                  kids to read a field two passes ahead turns out to be the same skill
-                  as designing for latency — position before the ball arrives.
-                </p>
-                <p>
-                  Resident quality-assurance engineer: <strong>Casper</strong>, a
-                  rescued white pit mix whose primary contribution to these systems
-                  is enforced walk breaks.
-                </p>
-              </div>
-
-              <div className="mt-8 flex flex-wrap items-center gap-4">
-                <a
-                  href={resumeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="border border-line-strong px-6 py-3 font-mono text-xs font-semibold uppercase tracking-wider text-ink transition hover:border-accent hover:text-accent"
-                >
-                  Resume — PDF ↓
-                </a>
-                <ExternalLink
-                  href={GITHUB_URL}
-                  className="font-mono text-xs uppercase tracking-wider text-ink-faint transition hover:text-accent"
-                >
-                  github/NightsTTV →
-                </ExternalLink>
-              </div>
-            </Reveal>
-
-            {/* Contact register */}
-            <Reveal className="lg:col-span-5" delay={80}>
-              <div className="border border-line bg-surface p-6 sm:p-8">
-                <p className="font-mono text-[0.62rem] uppercase tracking-[0.22em] text-ink-faint">
-                  Open a channel
-                </p>
-                <ul className="mt-5 divide-y divide-line">
-                  {[
-                    { label: 'Email — university', value: 'klthoma8@uno.edu', href: 'mailto:klthoma8@uno.edu' },
-                    { label: 'Email — personal', value: 'kaspian2005@gmail.com', href: 'mailto:kaspian2005@gmail.com' },
-                    { label: 'Phone', value: '985-772-1721', href: 'tel:+19857721721' },
-                    { label: 'LinkedIn', value: 'in/kaspian-thomas', href: LINKEDIN_URL, external: true },
-                    { label: 'GitHub', value: '@NightsTTV', href: GITHUB_URL, external: true },
-                  ].map((row) => (
-                    <li key={row.label}>
-                      {row.external ? (
-                        <ExternalLink
-                          href={row.href}
-                          className="group flex items-baseline justify-between gap-4 py-3"
-                        >
-                          <span className="font-mono text-[0.62rem] uppercase tracking-[0.22em] text-ink-faint">
-                            {row.label}
-                          </span>
-                          <span className="font-mono text-sm text-ink-soft transition group-hover:text-accent">
-                            {row.value}
-                          </span>
-                        </ExternalLink>
-                      ) : (
-                        <a href={row.href} className="group flex items-baseline justify-between gap-4 py-3">
-                          <span className="font-mono text-[0.62rem] uppercase tracking-[0.22em] text-ink-faint">
-                            {row.label}
-                          </span>
-                          <span className="font-mono text-sm text-ink-soft transition group-hover:text-accent">
-                            {row.value}
-                          </span>
-                        </a>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-5 font-mono text-[0.68rem] leading-relaxed text-ink-faint">
-                  Recruiting, research collab, or a hard problem worth arguing about —
-                  all three reach the same inbox.
-                </p>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
     </>
   )
 }
