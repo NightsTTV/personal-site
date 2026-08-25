@@ -35,7 +35,7 @@ export function CommandPalette({ open, onClose, onContact }: CommandPaletteProps
     return [
       { label: 'Home', hint: 'SECTION', run: go('/') },
       { label: 'Projects', hint: 'SECTION', run: go('/#projects') },
-      { label: 'Colophon / Contact', hint: 'PANEL', run: () => { onContact?.(); onClose() } },
+      { label: 'Get in touch', hint: 'CONTACT', run: () => { onContact?.(); onClose() } },
       ...projectSummaries
         .filter((p) => p.path.startsWith('/projects'))
         .map((p) => ({ label: p.title, hint: 'PROJECT', run: go(p.path) })),

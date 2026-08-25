@@ -8,12 +8,13 @@ import { useActiveSection } from '../hooks/useActiveSection'
 import { useTheme } from '../hooks/useTheme'
 
 /**
- * Docked dossier layout (goal: About & Colophon refactor):
- *  - "get in touch" selected (default on desktop) → index/work fill the left,
- *    the Operator Dossier docks into a right-hand rail — no dead margins.
- *  - Unselected → classic centered layout, contact card hidden until reopened
- *    from the nav CTA / ⌘K palette.
- *  - kaspiBOT stays pinned bottom-right in both states.
+ * Operator Dossier layout:
+ *  - "Get in touch" is selected by default → the dossier is docked as an
+ *    off-canvas panel on the right edge (page content reflows left of it on
+ *    desktop so nothing is covered).
+ *  - Deselect → the panel slides off to the right and hides; reopen from the
+ *    nav CTA or the ⌘K palette.
+ *  - kaspiBOT stays pinned bottom-right, above the panel, in both states.
  */
 
 const navLinks = [
@@ -54,10 +55,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [cmdOpen, setCmdOpen] = useState(false)
   const { theme, toggleTheme } = useTheme()
   const active = useActiveSection(sectionIds)
-  // Dossier defaults open where a rail fits (desktop); hidden behind the CTA on mobile.
-  const [contactOpen, setContactOpen] = useState(
-    () => typeof window === 'undefined' || window.innerWidth >= 1024,
-  )
+  // "Get in touch" is selected by default, so the dossier shows on first load.
+  const [contactOpen, setContactOpen] = useState(true)
 
   const openContact = () => {
     setContactOpen(true)
@@ -124,24 +123,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   </Link>
                 </li>
               ))}
-              <li>
-                <button
-                  type="button"
-                  onClick={openContact}
-                  aria-expanded={contactOpen}
-                  className={`kicker ul-grow inline-flex items-center gap-1.5 transition-colors ${
-                    contactOpen ? 'text-accent' : 'text-ink-faint hover:text-ink'
-                  }`}
-                >
-                  <span
-                    aria-hidden="true"
-                    className={`h-1 w-1 rounded-full bg-accent-bright transition-opacity ${
-                      contactOpen ? 'opacity-100' : 'opacity-0'
-                    }`}
-                  />
-                  Colophon
-                </button>
-              </li>
             </ul>
             <span className="h-5 w-px bg-line-strong" aria-hidden="true" />
             <button
@@ -203,16 +184,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   </Link>
                 </li>
               ))}
-              <li>
-                <button
-                  type="button"
-                  onClick={openContact}
-                  aria-expanded={contactOpen}
-                  className="block w-full rounded-lg px-3 py-2.5 text-left font-mono text-xs uppercase tracking-wider text-ink-soft transition hover:bg-surface-2 hover:text-ink"
-                >
-                  Colophon
-                </button>
-              </li>
             </ul>
             <button
               type="button"
@@ -226,52 +197,42 @@ export function Layout({ children }: { children: React.ReactNode }) {
         )}
       </header>
 
-      {/* Docked split: index/work left · dossier rail right */}
-      <div className="relative mx-auto flex w-full max-w-[110rem] items-start">
-        <main className="relative min-w-0 flex-1 pt-[3.25rem]">{children}</main>
+      {/* Page content — reflows left of the dossier rail on desktop when open */}
+      <div
+        className={`relative mx-auto w-full max-w-[110rem] transition-[padding] duration-300 ease-out ${
+          contactOpen ? 'lg:pr-[25rem] xl:pr-[27.5rem]' : ''
+        }`}
+      >
+        <main className="relative min-w-0 pt-[3.25rem]">{children}</main>
 
-        <aside
-          id="colophon"
-          aria-label="Operator dossier — links and contact"
-          className="sticky top-[3.25rem] hidden max-h-[calc(100vh-3.25rem)] w-[24rem] shrink-0 overflow-y-auto p-4 lg:block xl:w-[26.5rem] xl:p-6"
-        >
-          <OperatorDossier onClose={() => setContactOpen(false)} />
-        </aside>
-      </div>
-
-      {/* Mobile drawer — same dossier, slides over content */}
-      {contactOpen && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-label="Operator dossier — links and contact"
-          className="fixed inset-0 z-[55] lg:hidden"
-        >
-          <button
-            type="button"
-            aria-label="Close contact card"
-            onClick={() => setContactOpen(false)}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-          />
-          <div className="absolute inset-y-0 right-0 w-[min(26rem,calc(100vw-1.5rem))] overflow-y-auto p-3">
-            <OperatorDossier onClose={() => setContactOpen(false)} />
-          </div>
-        </div>
-      )}
-
-      <footer className="relative border-t border-line">
-        <div className="flex max-w-none flex-col items-center justify-between gap-4 px-4 py-10 sm:flex-row sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2.5">
-            <Monogram className="h-5 w-5" />
-            <p className="font-mono text-xs text-ink-faint">
-              © {new Date().getFullYear()} Kaspian Thomas
+        <footer className="relative border-t border-line">
+          <div className="flex max-w-none flex-col items-center justify-between gap-4 px-4 py-10 sm:flex-row sm:px-6 lg:px-8">
+            <div className="flex items-center gap-2.5">
+              <Monogram className="h-5 w-5" />
+              <p className="font-mono text-xs text-ink-faint">
+                © {new Date().getFullYear()} Kaspian Thomas
+              </p>
+            </div>
+            <p className="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-ink-faint">
+              Designed &amp; built in New Orleans
             </p>
           </div>
-          <p className="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-ink-faint">
-            Designed &amp; built in New Orleans
-          </p>
-        </div>
-      </footer>
+        </footer>
+      </div>
+
+      {/* Operator dossier — off-canvas panel pinned to the right edge.
+       * Selected by default (slid in); deselecting "get in touch" slides it
+       * off to the right to hide. kaspiBOT (z-59/60) stays pinned above it. */}
+      <aside
+        id="colophon"
+        aria-label="Operator dossier — links and contact"
+        aria-hidden={!contactOpen}
+        className={`fixed right-0 top-[3.25rem] z-40 max-h-[calc(100dvh-3.25rem)] w-[min(100vw,24rem)] overflow-y-auto overscroll-contain px-3 pb-6 pt-3 transition-transform duration-300 ease-out will-change-transform xl:w-[26.5rem] xl:px-4 ${
+          contactOpen ? 'translate-x-0' : 'pointer-events-none translate-x-full'
+        }`}
+      >
+        <OperatorDossier onClose={() => setContactOpen(false)} />
+      </aside>
 
       <ChipWidget />
       <CommandPalette
