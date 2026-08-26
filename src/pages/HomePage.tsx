@@ -30,22 +30,10 @@ export function HomePage() {
             className="rise mt-8 font-display text-[clamp(2.25rem,5.5vw,3.75rem)] font-normal leading-[1.05] tracking-tight text-ink"
             style={{ animationDelay: '90ms' }}
           >
-            Evolutionary computation, genetic AI systems, and real-time
-            distributed telemetry — engineered end to end, measured where it
-            counts.
+            Building an inclusive future for everyone by adapting to modern
+            agentic systems, architectures, and their real world
+            implications/trade-offs.
           </h1>
-
-          <p
-            className="rise mt-7 max-w-3xl text-pretty text-lg leading-relaxed text-ink-soft"
-            style={{ animationDelay: '200ms' }}
-          >
-            I build systems that have to survive contact with live data:
-            telemetry pipelines that turn raw event firehoses into decisions,
-            learning systems grounded in verifiable history, and the
-            concurrent infrastructure underneath them. The work below is
-            documented the way it was built — architecture, trade-offs, and
-            outcomes.
-          </p>
 
           <dl
             className="rise mt-10 grid gap-x-10 border-y border-line py-5 sm:grid-cols-2"
