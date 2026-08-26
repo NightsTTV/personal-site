@@ -119,8 +119,9 @@ export function OperatorDossier({ onClose }: OperatorDossierProps) {
             of New Orleans.
           </p>
           <p>
-            Focusing on evolutionary computation, genetic AI architectures, and
-            real-time streaming pipelines outside traditional constraints.
+            Focused on modern agentic systems and architectures — and the
+            real-world implications and trade-offs of adapting them toward a
+            more inclusive future.
           </p>
           <p>
             Resident QA engineer: <strong>Casper</strong>, a rescued white pit mix

@@ -1,7 +1,7 @@
 import { ProjectsSection } from '../components/project/ProjectsSection'
 
 const heroStats: { label: string; value: string; data?: boolean }[] = [
-  { label: 'FOCUS', value: 'Evolutionary computation · genetic AI', data: true },
+  { label: 'FOCUS', value: 'Agentic systems · real-world AI', data: true },
   { label: 'SYSTEMS', value: 'Real-time distributed telemetry' },
   { label: 'EDU', value: 'B.S. CS · AI/ML — University of New Orleans' },
   { label: 'BASE', value: 'New Orleans · Houma, Louisiana' },
