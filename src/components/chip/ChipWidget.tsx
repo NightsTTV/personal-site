@@ -166,8 +166,8 @@ export function ChipWidget() {
           aria-hidden="true"
           className="pointer-events-none fixed z-[59] select-none"
           style={{
-            /* Centre the mascot container over the pill */
-            left: 24,
+            /* Centre the mascot container over the pill (bottom-right) */
+            right: 16,
             bottom: pillH + 12 - mascotOverlap, // 12 = pill bottom offset
             width: 160,
             height: 200,
@@ -194,7 +194,7 @@ export function ChipWidget() {
       {open && (
         <div
           className="pointer-events-none fixed z-[60]"
-          style={{ left: 16, bottom: pillH + 12 + 8 }}
+          style={{ right: 12, bottom: pillH + 12 + 8 }}
         >
           <div
             role="dialog"
@@ -304,7 +304,7 @@ export function ChipWidget() {
         onClick={toggleChat}
         aria-expanded={open}
         aria-label={open ? 'Close kaspiBOT chat' : 'Open kaspiBOT chat'}
-        className="chip-pill fixed bottom-3 left-4 z-[60] flex items-center gap-2 rounded-full border border-line bg-surface-2/95 px-4 py-2.5 shadow-lg backdrop-blur-xl transition-all hover:bg-surface-2 hover:shadow-xl"
+        className="chip-pill fixed bottom-3 right-4 z-[60] flex items-center gap-2 rounded-full border border-line bg-surface-2/95 px-4 py-2.5 shadow-lg backdrop-blur-xl transition-all hover:bg-surface-2 hover:shadow-xl"
         style={{ maxWidth: 'max(12.5vw, 160px)' }}
       >
         <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent-bright text-accent-contrast">

@@ -9,13 +9,15 @@ type Item = { label: string; hint: string; run: () => void }
 type CommandPaletteProps = {
   open: boolean
   onClose: () => void
+  /** Opens the docked operator dossier / contact rail. */
+  onContact?: () => void
 }
 
 /**
  * ⌘K quick-nav: sections, project pages, resume, and external profiles.
  * Keyboard: arrows to move, Enter to run, Escape to close.
  */
-export function CommandPalette({ open, onClose }: CommandPaletteProps) {
+export function CommandPalette({ open, onClose, onContact }: CommandPaletteProps) {
   const navigate = useNavigate()
   const [query, setQuery] = useState('')
   const [sel, setSel] = useState(0)
@@ -33,8 +35,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
     return [
       { label: 'Home', hint: 'SECTION', run: go('/') },
       { label: 'Projects', hint: 'SECTION', run: go('/#projects') },
-      { label: 'About', hint: 'SECTION', run: go('/#about') },
-      { label: 'Contact', hint: 'SECTION', run: go('/#contact') },
+      { label: 'Get in touch', hint: 'CONTACT', run: () => { onContact?.(); onClose() } },
       ...projectSummaries
         .filter((p) => p.path.startsWith('/projects'))
         .map((p) => ({ label: p.title, hint: 'PROJECT', run: go(p.path) })),
@@ -42,7 +43,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
       { label: 'GitHub — NightsTTV', hint: 'LINK', run: ext(GITHUB_URL) },
       { label: 'LinkedIn', hint: 'LINK', run: ext(LINKEDIN_URL) },
     ]
-  }, [navigate, onClose])
+  }, [navigate, onClose, onContact])
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()

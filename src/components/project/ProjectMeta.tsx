@@ -1,34 +1,31 @@
-/** Shared bits between the projects grid and scroll views. */
+/**
+ * Shared metadata primitives — strict monospace, bracket-form, no pills.
+ */
 
-export function StatusChip({ status }: { status: string }) {
-  const upcoming = status.toLowerCase().includes('coming')
+export function StatusLine({ status }: { status: string }) {
+  const live = status.toLowerCase() === 'live'
   return (
-    <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[0.68rem] uppercase tracking-wide ${
-        upcoming
-          ? 'border-line bg-surface-2 text-ink-faint'
-          : 'border-accent/30 bg-accent-bright/10 text-accent'
-      }`}
-    >
-      {!upcoming && (
-        <span aria-hidden="true" className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent-bright" />
+    <span className="font-mono text-[0.68rem] tracking-[0.2em] text-ink-faint">
+      <span aria-hidden="true">[ </span>
+      <span className={live ? 'text-accent' : undefined}>{status}</span>
+      {live && (
+        <span
+          aria-hidden="true"
+          className="ml-1.5 inline-block h-1.5 w-1.5 animate-pulse bg-accent-bright align-middle"
+        />
       )}
-      {status}
+      <span aria-hidden="true"> ]</span>
     </span>
   )
 }
 
-export function Tags({ tags }: { tags: string[] }) {
+/** `[ Python / FastAPI / RAG ]` — one mono line, not a row of chips. */
+export function TagLine({ tags }: { tags: string[] }) {
   return (
-    <div className="flex flex-wrap gap-1.5">
-      {tags.map((tag) => (
-        <span
-          key={tag}
-          className="rounded border border-line bg-surface-2/60 px-2 py-0.5 font-mono text-[0.68rem] text-ink-faint"
-        >
-          {tag}
-        </span>
-      ))}
-    </div>
+    <p className="font-mono text-[0.7rem] leading-relaxed text-ink-faint">
+      <span aria-hidden="true" className="text-line-strong">[ </span>
+      {tags.join(' / ')}
+      <span aria-hidden="true" className="text-line-strong"> ]</span>
+    </p>
   )
 }

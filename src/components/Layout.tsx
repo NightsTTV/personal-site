@@ -3,16 +3,27 @@ import { Link } from 'react-router-dom'
 import { CommandPalette } from './CommandPalette'
 import { ThemeToggle } from './ThemeToggle'
 import { ChipWidget } from './chip/ChipWidget'
+import { OperatorDossier } from './dossier/OperatorDossier'
 import { useActiveSection } from '../hooks/useActiveSection'
 import { useTheme } from '../hooks/useTheme'
 
+/**
+ * Operator Dossier layout:
+ *  - "Get in touch" is selected by default → the dossier is docked as an
+ *    off-canvas panel on the right edge (page content reflows left of it on
+ *    desktop so nothing is covered).
+ *  - Deselect → the panel slides off to the right and hides; reopen from the
+ *    nav CTA or the ⌘K palette.
+ *  - kaspiBOT stays pinned bottom-right, above the panel, in both states.
+ */
+
 const navLinks = [
-  { label: 'Home', to: '/', id: 'home' },
-  { label: 'Projects', to: '/#projects', id: 'projects' },
-  { label: 'About', to: '/#about', id: 'about' },
-  { label: 'Contact', to: '/#contact', id: 'contact' },
+  { label: 'Index', to: '/', id: 'home' },
+  { label: 'Work', to: '/#projects', id: 'projects' },
 ]
 
+// Scroll-spy only tracks real page sections — the dossier rail is a persistent
+// overlay-style panel, not something the viewport band should highlight.
 const sectionIds = navLinks.map((l) => l.id)
 
 function Monogram({ className = '' }: { className?: string }) {
@@ -44,6 +55,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [cmdOpen, setCmdOpen] = useState(false)
   const { theme, toggleTheme } = useTheme()
   const active = useActiveSection(sectionIds)
+  // "Get in touch" is selected by default, so the dossier shows on first load.
+  const [contactOpen, setContactOpen] = useState(true)
+
+  const openContact = () => {
+    setContactOpen(true)
+    setMenuOpen(false)
+  }
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -57,28 +75,27 @@ export function Layout({ children }: { children: React.ReactNode }) {
   }, [])
 
   return (
-    <div className="relative min-h-screen text-ink">
-      {/* Atmosphere: phosphor glow · dot lattice · grain */}
+    <div
+      className="relative min-h-screen text-ink"
+      data-dock={contactOpen ? 'open' : 'closed'}
+    >
+      {/* Atmosphere: dot lattice · grain */}
       <div
         aria-hidden="true"
         className="grain pointer-events-none fixed inset-0 -z-10 overflow-hidden"
       >
-        <div
-          className="bg-lattice absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_70%)]"
-        />
-        <div className="absolute -top-48 left-1/2 h-[620px] w-[min(960px,120vw)] -translate-x-1/2 rounded-full bg-[rgb(var(--signal)/0.10)] blur-[130px]" />
-        <div className="absolute right-[-10%] top-1/3 h-[420px] w-[420px] rounded-full bg-[rgb(var(--signal)/0.05)] blur-[120px]" />
+        <div className="bg-lattice absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_70%)]" />
       </div>
 
       <header className="fixed inset-x-0 top-0 z-50 border-b border-line/80 bg-paper/70 backdrop-blur-xl">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5 sm:px-6 lg:px-8">
+        <nav className="mx-auto flex max-w-full items-center justify-between gap-4 px-4 py-2.5 sm:px-6 lg:px-8">
           <Link
             to="/"
             className="group flex items-center gap-2.5"
             aria-label="Kaspian Thomas — home"
           >
             <Monogram className="h-6 w-6 shrink-0 transition-transform duration-300 group-hover:rotate-[-6deg]" />
-            <span className="font-display text-lg font-semibold tracking-tight text-ink">
+            <span className="font-display text-lg tracking-tight text-ink">
               Kaspian Thomas
             </span>
           </Link>
@@ -117,12 +134,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
               ⌘K
             </button>
             <ThemeToggle theme={theme} onToggle={toggleTheme} />
-            <Link
-              to="/#contact"
-              className="rounded-md bg-accent-bright px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-accent-contrast transition hover:brightness-105 hover:shadow-[0_0_24px_rgb(var(--signal)/0.45)]"
+            <button
+              type="button"
+              onClick={() => setContactOpen((o) => !o)}
+              aria-pressed={contactOpen}
+              className={`border px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider transition ${
+                contactOpen
+                  ? 'border-accent bg-accent-bright text-accent-contrast hover:brightness-105'
+                  : 'border-line-strong text-ink hover:border-accent hover:text-accent'
+              }`}
             >
               Get in touch
-            </Link>
+            </button>
           </div>
 
           <div className="flex items-center gap-1 md:hidden">
@@ -162,35 +185,61 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </li>
               ))}
             </ul>
-            <Link
-              to="/#contact"
-              className="mt-3 block rounded-md bg-accent-bright px-5 py-2.5 text-center font-mono text-xs font-semibold uppercase tracking-wider text-accent-contrast transition hover:brightness-105"
-              onClick={() => setMenuOpen(false)}
+            <button
+              type="button"
+              onClick={() => setContactOpen((o) => !o)}
+              aria-pressed={contactOpen}
+              className="mt-3 block w-full border border-line-strong px-5 py-2.5 text-center font-mono text-xs font-semibold uppercase tracking-wider text-ink transition hover:border-accent hover:text-accent"
             >
               Get in touch
-            </Link>
+            </button>
           </div>
         )}
       </header>
 
-      <main className="relative pt-[3.25rem]">{children}</main>
+      {/* Page content — reflows left of the dossier rail on desktop when open */}
+      <div
+        className={`relative mx-auto w-full max-w-[110rem] transition-[padding] duration-300 ease-out ${
+          contactOpen ? 'lg:pr-[25rem] xl:pr-[27.5rem]' : ''
+        }`}
+      >
+        <main className="relative min-w-0 pt-[3.25rem]">{children}</main>
 
-      <footer className="border-t border-line">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-10 sm:flex-row sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2.5">
-            <Monogram className="h-5 w-5" />
-            <p className="font-mono text-xs text-ink-faint">
-              © {new Date().getFullYear()} Kaspian Thomas
+        <footer className="relative border-t border-line">
+          <div className="flex max-w-none flex-col items-center justify-between gap-4 px-4 py-10 sm:flex-row sm:px-6 lg:px-8">
+            <div className="flex items-center gap-2.5">
+              <Monogram className="h-5 w-5" />
+              <p className="font-mono text-xs text-ink-faint">
+                © {new Date().getFullYear()} Kaspian Thomas
+              </p>
+            </div>
+            <p className="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-ink-faint">
+              Designed &amp; built in New Orleans
             </p>
           </div>
-          <p className="font-mono text-[0.7rem] uppercase tracking-[0.2em] text-ink-faint">
-            Designed &amp; built in New Orleans
-          </p>
-        </div>
-      </footer>
+        </footer>
+      </div>
+
+      {/* Operator dossier — off-canvas panel pinned to the right edge.
+       * Selected by default (slid in); deselecting "get in touch" slides it
+       * off to the right to hide. kaspiBOT (z-59/60) stays pinned above it. */}
+      <aside
+        id="colophon"
+        aria-label="Operator dossier — links and contact"
+        aria-hidden={!contactOpen}
+        className={`fixed right-0 top-[3.25rem] z-40 max-h-[calc(100dvh-3.25rem)] w-[min(100vw,24rem)] overflow-y-auto overscroll-contain px-3 pb-6 pt-3 transition-transform duration-300 ease-out will-change-transform xl:w-[26.5rem] xl:px-4 ${
+          contactOpen ? 'translate-x-0' : 'pointer-events-none translate-x-full'
+        }`}
+      >
+        <OperatorDossier onClose={() => setContactOpen(false)} />
+      </aside>
 
       <ChipWidget />
-      <CommandPalette open={cmdOpen} onClose={() => setCmdOpen(false)} />
+      <CommandPalette
+        open={cmdOpen}
+        onClose={() => setCmdOpen(false)}
+        onContact={openContact}
+      />
     </div>
   )
 }
