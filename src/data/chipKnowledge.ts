@@ -20,7 +20,7 @@ export type ChipRule = {
 
 /** Opening lines — kaspiBOT's `getInitial()`. */
 export const chipInitials = [
-  "Hi — I'm kaspiBOT, Kaspian's pattern-matching sidekick. Ask me anything about him: school, projects, soccer, what he's chasing next.",
+  "Hi — I'm kaspiBOT, Kaspian's pattern-matching sidekick. Ask me anything about him: school, work, projects, what he's chasing next.",
   "Hey there. kaspiBOT here, built on Kaspian's ELIZA-style CHIP project. Ask me about him — where should we start?",
   "Welcome. I'm kaspiBOT — Kaspian's hand-coded guide. Go ahead and ask about his background, work, or projects.",
 ]
@@ -71,7 +71,7 @@ export const chipRules: ChipRule[] = [
     rank: 50,
     patterns: [/\b(hi|hii+|hey+|hello+|yo|howdy|sup|hiya|good (morning|afternoon|evening))\b/i],
     responses: [
-      'Hey! Ask me about Kaspian — his studies, his projects, his soccer, whatever you’re curious about.',
+      'Hey! Ask me about Kaspian — his studies, his work, his projects, whatever you’re curious about.',
       'Hi there. What would you like to know about Kaspian?',
       'Hello! I can tell you about Kaspian’s background, projects, and goals. Pick a thread.',
     ],
@@ -99,8 +99,8 @@ export const chipRules: ChipRule[] = [
     rank: 47,
     patterns: [/\b(help|what can (i|you)|what do you (do|know)|topics|options|menu)\b/i],
     responses: [
-      'Try me on: his school & major, his GPA & honors, where he’s from, his projects (F1, UNO, BioBERT, CHIP), his soccer, his hobbies, his career goals, or how to contact him.',
-      'I know Kaspian’s background, education, work, soccer, hobbies, all four of his projects, and his goals. What sounds interesting?',
+      'Try me on: his school & major, his GPA & honors, where he’s from, his projects (F1, UNO, BioBERT, CHIP), his work, his hobbies, his career goals, or how to contact him.',
+      'I know Kaspian’s background, education, work, hobbies, all four of his projects, and his goals. What sounds interesting?',
     ],
   },
   {
@@ -119,8 +119,8 @@ export const chipRules: ChipRule[] = [
     rank: 40,
     patterns: [/\b(his|the) name\b/i, /\bwho is (he|kaspian|this)\b/i, /\bintroduce\b/i, /\babout (him|kaspian|yourself)\b/i, /\bwho('?s| is) kaspian\b/i],
     responses: [
-      'His name is Kaspian Thomas — a 20-year-old Computer Science student at the University of New Orleans, concentrating in AI & Machine Learning. Soccer player, builder, and aspiring AI engineer.',
-      'Kaspian Thomas: 20, a CS major (AI/ML concentration) at the University of New Orleans, semi-pro soccer player, and someone who builds AI projects for fun. Want the deep dive on any of that?',
+      'His name is Kaspian Thomas — a 20-year-old Computer Science student at the University of New Orleans, concentrating in AI & Machine Learning, and an independent contractor working as an AI/Software Engineer for a security company.',
+      'Kaspian Thomas: 20, a CS major (AI/ML concentration) at the University of New Orleans, contract AI/Software Engineer for a security company, and someone who builds AI projects for fun. Want the deep dive on any of that?',
     ],
   },
   {
@@ -157,8 +157,8 @@ export const chipRules: ChipRule[] = [
     rank: 44,
     patterns: [/\b(gpa|grades|grade point|academic record|how.*(doing|grades))\b/i],
     responses: [
-      'His current GPA is 3.8/4.0 — and he made the President’s List in both Fall 2026 and Spring 2027.',
-      'Kaspian holds a 3.8/4.0 GPA, with back-to-back President’s List honors (Fall 2026 and Spring 2027).',
+      'He holds a 3.6/4.0 cumulative GPA and a 3.8/4.0 in his CS courses — with three President’s List honors (Spring 2025, Fall 2025, Spring 2026).',
+      'Kaspian has a 3.6 cumulative GPA and a 3.8 in computer science, plus President’s List three times over.',
     ],
   },
   {
@@ -166,8 +166,8 @@ export const chipRules: ChipRule[] = [
     rank: 44,
     patterns: [/\b(award|honor|achievement|accolad|president'?s list|dean'?s list|recognition|accomplish)\b/i],
     responses: [
-      'Kaspian earned President’s List honors at the University of New Orleans in both Fall 2026 and Spring 2027, holds a 3.8 GPA, and earned his associate degree in CS on a soccer scholarship.',
-      'Highlights: President’s List (Fall 2026 & Spring 2027), a 3.8/4.0 GPA, and a soccer scholarship that funded his associate degree in Computer Science.',
+      'At the University of New Orleans, Kaspian made the President’s List three times (Spring 2025, Fall 2025, Spring 2026) and the Dean’s List in Fall 2024. He earned his associate degree in CS on a soccer scholarship.',
+      'Highlights: President’s List ×3, Dean’s List, a 3.8/4.0 CS GPA, and a soccer scholarship that funded his associate degree in Computer Science.',
     ],
   },
 
@@ -178,27 +178,18 @@ export const chipRules: ChipRule[] = [
     patterns: [/\b(where.*(from|live|based|located)|hometown|grew up|origin|mississippi|new orleans|nola|location|live)\b/i],
     responses: [
       'Kaspian is originally from about an hour southeast of New Orleans. He spent time in Mississippi — earning his associate degree in CS there on a soccer scholarship — before settling in New Orleans, where he’s based now.',
-      'He grew up about an hour southeast of New Orleans, did a stint in Mississippi (associate degree in CS on a soccer scholarship), and now calls New Orleans home. Go Lions!',
+      'He grew up about an hour southeast of New Orleans, did a stint in Mississippi (associate degree in CS on a soccer scholarship), and now calls New Orleans home.',
     ],
   },
 
   /* ---------- work / experience ---------- */
   {
-    id: 'coaching',
-    rank: 46,
-    patterns: [/\b(coach|coaching|leadership|lead a team|manage|mentor)\b/i],
-    responses: [
-      'Kaspian worked as a head soccer coach for a youth competitive team in New Orleans, leading a group of 15–18-year-old young men. It’s where a lot of his leadership and communication chops come from.',
-      'He led a competitive youth soccer team (ages 15–18) in NOLA as head coach — real leadership reps, on and off the field.',
-    ],
-  },
-  {
     id: 'experience',
     rank: 41,
     patterns: [/\b(experience|work|works|worked|job|jobs|employ|intern|internship|career history|professional|resume|cv)\b/i],
     responses: [
-      'Right now Kaspian builds his experience through research and hackathons in his free time, plus collaborative projects with peers whenever the chance comes up. He’s currently unemployed and open to opportunities. Previously he was head coach of a youth competitive soccer team in New Orleans.',
-      'He’s currently between roles and actively looking. He sharpens his skills through research, hackathons, and team projects, and he previously coached a competitive youth soccer team (ages 15–18). Loves collaborating — ask about his projects to see the output.',
+      'Kaspian works as an independent contractor — an AI/Software Engineer for a security company — building agent-platform systems: automated device monitoring, an internal operations console, and customer notification pipelines. On top of that he does research, hackathons, and projects with peers.',
+      'He’s a contract AI/Software Engineer for a security company, working part-time alongside school. Outside of that he sharpens his skills through research, hackathons, and team projects — ask about his projects to see the output.',
     ],
   },
   {
@@ -207,7 +198,7 @@ export const chipRules: ChipRule[] = [
     patterns: [/\b(hackathon|hack|competition|compete)\b/i],
     responses: [
       'Kaspian has competed in one hackathon so far and is always hunting for the next one — they’re a big part of how he learns by building under pressure.',
-      'He’s done one hackathon to date and treats them (along with research) as his main way of gaining hands-on experience right now.',
+      'He’s done one hackathon to date — the IBM hackathon that produced his F1 real-time commentary system — and is always up for the next.',
     ],
   },
   {
@@ -224,10 +215,10 @@ export const chipRules: ChipRule[] = [
   {
     id: 'soccer',
     rank: 45,
-    patterns: [/\b(soccer|football|semi[- ]?pro|lions|scholarship|fourth division|4th division|athlet)\b/i],
+    patterns: [/\b(soccer|football|semi[- ]?pro|scholarship|athlet)\b/i],
     responses: [
-      'Soccer is a huge part of who Kaspian is. He currently plays at the semi-pro (fourth-division) level of US soccer in his hometown, earned his associate degree on a soccer scholarship, and coached a competitive youth team. Go Lions!',
-      'He plays semi-pro (fourth division) US soccer back home, and soccer also funded his associate degree via a scholarship. On and off the pitch, he’s all about taking every chance to improve.',
+      'Soccer is a big part of Kaspian’s story — it funded his associate degree in Computer Science through a scholarship, and it inspired his BioBERT soccer-injury classifier.',
+      'A soccer scholarship paid for his associate degree, and the sport still shows up in his work — see his BioBERT injury-severity project.',
     ],
   },
 
@@ -339,7 +330,7 @@ export const chipRules: ChipRule[] = [
     rank: 0,
     patterns: [/.*/],
     responses: [
-      'I’m not sure I caught that — I’m a keyword-matcher at heart. Try asking about Kaspian’s school, projects, soccer, hobbies, or goals.',
+      'I’m not sure I caught that — I’m a keyword-matcher at heart. Try asking about Kaspian’s school, work, projects, hobbies, or goals.',
       'Hmm, that one slipped past my triggers. Ask me about his education, his four projects (F1, UNO, BioBERT, CHIP), or how to reach him.',
       'I work by spotting keywords, ELIZA-style, so let’s find one — want to hear about Kaspian’s background, a specific project, or his career goals?',
     ],

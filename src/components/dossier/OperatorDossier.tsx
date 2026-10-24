@@ -1,6 +1,6 @@
 import { ExternalLink } from '../ExternalLink'
 import { GITHUB_URL, LINKEDIN_URL } from '../../constants/links'
-import resumeUrl from '../../assets/Resume26.pdf'
+import resumeUrl from '../../assets/KaspianThomas_Resume.pdf'
 
 /**
  * Operator Dossier — 3-zone technical dossier card (goal: About & Colophon refactor):
@@ -116,7 +116,8 @@ export function OperatorDossier({ onClose }: OperatorDossierProps) {
           <p>
             From <strong>Houma, Louisiana</strong> — bayou roots, New Orleans base.
             Undergraduate researcher in computer science (AI/ML) at the University
-            of New Orleans.
+            of New Orleans, and an independent contractor working as an
+            AI/Software Engineer for a security company.
           </p>
           <p>
             Focused on modern agentic systems and architectures — and the

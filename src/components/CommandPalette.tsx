@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import resumeUrl from '../assets/Resume26.pdf'
+import resumeUrl from '../assets/KaspianThomas_Resume.pdf'
 import { GITHUB_URL, LINKEDIN_URL } from '../constants/links'
 import { projectSummaries } from '../data/projects'
 
